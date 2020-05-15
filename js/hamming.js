@@ -47,14 +47,14 @@ function codeHamming(bin) {
         if (bin.length <=4) {
 
             parrityBits =  3;
-            var controlTable= "0001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
+            var controlTable= "1011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
         }
         else
         {
             if(bin.length<=11)   //https://en.wikipedia.org/wiki/Hamming_code na podstawie tabeli general Algorithm
             {
                 parrityBits =  4;
-                var controlTable= "000000010001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
+                var controlTable= "10001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
 
             }
             else
@@ -62,7 +62,7 @@ function codeHamming(bin) {
                 if(bin.length<=26)   //https://en.wikipedia.org/wiki/Hamming_code na podstawie tabeli general Algorithm
                 {
                     parrityBits =  5;
-                    var controlTable= "00000000001000000010001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
+                    var controlTable= "1000000010001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
                 }
                 else{
     throw new Error("Została wprowadzona za duża liczba!");
@@ -83,25 +83,29 @@ function codeHammingFromText(str) {
     for (i = 0; i < str.length; i++) {
         strAsciiArray[i]=str.charCodeAt(i);
         codeHamming(strAsciiArray[i].toString(2));
-
         outputBin= outputBin + " " + strAsciiArray[i].toString(2);
     }
     document.getElementById("binpacket").innerText=outputBin;
 
 }
+function IsPowerOfTwo(x)
+{
+    return (x != 0) && ((x & (x - 1)) == 0);
+}
 
 function hamming(parrityBits,controlTable, text) {
+
 
     document.getElementById("title").innerText="Słowo po kodowaniu hamminga";
 
     var i;
-    var  code = Array.from('0'.repeat(controlTable.length)) //utworzenie wyzerowanej zmiennej o odpowiedniej długości
+    var  code = Array.from('0'.repeat(text.length+parrityBits)) //utworzenie wyzerowanej zmiennej o odpowiedniej długości
     var binPosition=0;
 
     var j = (text.length-1); //indeks ostatniego elementu tablicy
-var k =1;
-    for (i = controlTable.length-1; i >=0; i--) {
-        if(controlTable[i]==="0"){
+    var k =1;
+    for (i = code.length-1; i >=0; i--) {
+        if(IsPowerOfTwo(code.length-i)===false){ //jeżeli pozycja nie jest liczbą podniesioną do potęgi 2
            if(j>=0){ //dopoki są elementy w tablicy z kodowanym tekstem
                code[i]=text[j];  //ustawienie bitu z tekstu (wartości binarnej)
 
@@ -126,13 +130,13 @@ var k =1;
 
     j = binPosition.length-1;
 
-    for (i = (controlTable.length-1); i >= 0; i--) {
-        if(controlTable[i]==="1"){
+    for (i = (code.length-1); i >= 0; i--) {
+        if(IsPowerOfTwo(code.length -i)===true){ //jeżeli pozycja jest liczbą podniesioną do potęgi 2
            if(j>=0){  //jezeli są jeszcze jakies elementy w liczbie kontrolnej (w binarnym przedstawieniu)
                code[i]= binPosition[j];  //ustawienie bitu  z tekstu na wartość bitu kontrolnego (wartości binarnej)
                j--;
            }else{
-               code[i]="0"; //ustawienie zera, ponieważ jeżeli liczba krótka, np binPosition = 1, reszte trzeba wypełnić zerami
+               //code[i]="0"; //ustawienie zera, ponieważ jeżeli liczba krótka, np binPosition = 1, reszte trzeba wypełnić zerami
            }
         }
     }

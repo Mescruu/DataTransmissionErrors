@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ed9ac1ab-ad99-4d73-b829-a157ded77ce7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/hamming.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/hamming.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +76,7 @@
       <workItem from="1589476590070" duration="13219000" />
       <workItem from="1589530164348" duration="145000" />
       <workItem from="1589532593075" duration="1586000" />
+      <workItem from="1589535620054" duration="1450000" />
     </task>
     <servers />
   </component>
@@ -98,10 +100,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="681" y="261" width="570" height="524" key="StructurePopup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589482113955" />
-    <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1589532592042">
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1589535620275">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589532592042" />
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589535620275" />
     <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1589384324694" />
     <state x="606" y="135" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1589476992514">
       <screen x="0" y="0" width="1920" height="1040" />
