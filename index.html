@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Podstawy teleinformatyki</title>
+    <meta name="author" content="Albert Woś">
+    <meta http-equiv="X-Ua-Compatible" content="IE=edge">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display&display=swap" rel="stylesheet">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="js/hamming.js"></script>
+    <script type="text/javascript" src="js/parrity.js"></script>
+    <script type="text/javascript" src="js/globalUsed.js"></script>
+
+</head>
+
+<body>
+
+    <header class="p-0 bg-dark" ID="myNavBar">
+        <div class="container">
+            <nav class="navbar sticky-top navbar-expand-lg navbar-dark px-0 py-4">
+                <a class="navbar-brand" href="#">PT</a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center " id="navbarText">
+                    <ul class="nav nav-pills" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Strona główna</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="parrity-tab" data-toggle="tab" href="#parrity" role="tab" aria-controls="parrity" aria-selected="false" onclick="setParrity();">Kontrola parzystości </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="hamming-tab" data-toggle="tab" href="#hamming" role="tab" aria-controls="hamming" aria-selected="false" onclick="setHamming();">Kodowanie Hamminga</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="crc-tab" data-toggle="tab" href="#crc" role="tab" aria-controls="crc" aria-selected="false" onclick="setCRC();">CRC</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="compare-tab" data-toggle="tab" href="#compare" role="tab" aria-controls="compare" aria-selected="false" onclick="setAll();">Porównanie</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+<div>
+</div>
+        </div>
+    </header>
+<main>
+    <div class="container pt-4">
+
+        <div class="row">
+
+        <div class="col-xl-6 col-md-12">
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+               <h1>
+                   PODSTAWY TELEINFORMATYKI
+               </h1>
+                <h2>
+                    Cwiczenie 2<br>
+                    <hr class="w-50">
+                    Detekcja i korekcja błedów w transmisji danych
+                </h2>
+            </div>
+            <div class="tab-pane fade" id="parrity" role="tabpanel" aria-labelledby="parrity-tab">
+
+                <h2>
+                    Kontrola parzystości
+                    <hr class="w-50">
+                </h2>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="my-4">
+                            <div class="form-row align-items-center  col-md-12 m-auto">
+                                <div class="col-12">
+                                    <label for="thing2convertParrity">Wprowadź słowo</label>
+                                    <input type="text" class="form-control mb-2" id="thing2convertParrity" placeholder="  ">
+                                </div>
+                                <hr class="w-100">
+                                <div class="form-group m-auto col-12">
+                                    <label for="typeOfInputParrity">Typ słowa</label>
+                                    <select id="typeOfInputParrity" class="form-control" onchange="onTypeChange()">
+                                        <option selected>Liczba decymalna</option>
+                                        <option>Liczba binarna</option>
+                                        <option>Tekst</option>
+                                    </select>
+                                </div>
+                                <div class="form-group m-auto col-12" id="genereteWordParrity" style="display: none">
+                                    <button  type="button" class="btn btn-secondary w-100" Onclick="GenerateWord()">Generuj losowe słowo (1-12)</button>
+                                </div>
+                                <div class="form-group m-auto col-12" id="genereteDecParrity">
+                                    <button  type="button" class="btn btn-secondary w-100" Onclick="GenerateDec()">Generuj losową liczbę (1-99)</button>
+                                </div>
+                                <div class="form-group m-auto col-12" id="genereteBinParrity" style="display: none">
+                                    <button  type="button" class="btn btn-secondary w-100" Onclick="GenerateBin()">Generuj losową liczbę (1-99)</button>
+                                </div>
+
+                                <hr class="w-100">
+
+
+
+                                <div class=" w-50 m-auto">
+                                    <button  type="button" class="btn btn-secondary w-100" Onclick="Parrity()">konwertuj</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="card  col-md-12 m-auto">
+                            <div class="card-body">
+                                <h5 class="card-title">Słowo po przekonwertowaniu na system binarny</h5>
+                                <hr class="w-100">
+                                <span id="binpacketParrity">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card col-md-12 m-auto">
+                            <div class="card-body">
+                                <h5 class="card-title" id="titleParrity">Słowo po dodaniu bitu parzystości</h5>
+                                <hr class="w-100">
+                                <textarea class="form-control" id="outputconvertParrity" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" offset-xl-3  offset-md-0  col-md-6 col-sm-12 py-2">
+                        <button  type="button" class="btn btn-secondary btn-block" Onclick="checkCodeParrity()">Sprawdź kod powyżej</button>
+                    </div>
+
+
+
+                    <div class="card col-md-12 m-auto">
+                        <div class="card-body">
+                            <h5 class="card-title">Słowo po sprawdzeniu poprawności za pomoca kontroli parzystości</h5>
+                            <hr class="w-100">
+                            <span id="checkoutputParrity">
+
+                        </span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="tab-pane fade" id="hamming" role="tabpanel" aria-labelledby="hamming-tab">
+                <h2>
+                    Kodowanie Hamminga
+                    <hr class="w-50">
+                </h2>
+             <div class="row">
+                <div class="col-md-12">
+
+                    <form class="my-4">
+                        <div class="form-row align-items-center  col-md-12 m-auto">
+                            <div class="col-12">
+                                <label for="thing2convertHamming">Wprowadź słowo</label>
+                                <input type="text" class="form-control mb-2" id="thing2convertHamming" placeholder="  ">
+                            </div>
+                            <hr class="w-100">
+                            <div class="form-group m-auto col-12">
+                                <label for="typeOfInputHamming">Typ słowa</label>
+                                <select id="typeOfInputHamming" class="form-control" onchange="onTypeChange()">
+                                    <option selected>Liczba decymalna</option>
+                                    <option>Liczba binarna</option>
+                                    <option>Tekst</option>
+                                </select>
+                            </div>
+                            <div class="form-group m-auto col-12" id="genereteWordHamming" style="display: none">
+                                <button  type="button" class="btn btn-secondary w-100" Onclick="GenerateWord()">Generuj losowe słowo (1-12)</button>
+                            </div>
+                            <div class="form-group m-auto col-12" id="genereteDecHamming">
+                                <button  type="button" class="btn btn-secondary w-100" Onclick="GenerateDec()">Generuj losową liczbę (1-99)</button>
+                            </div>
+                            <div class="form-group m-auto col-12" id="genereteBinHamming" style="display: none">
+                                <button  type="button" class="btn btn-secondary w-100" Onclick="GenerateBin()">Generuj losową liczbę (1-99)</button>
+                            </div>
+
+                            <hr class="w-100">
+
+
+
+                            <div class=" w-50 m-auto">
+                                <button  type="button" class="btn btn-secondary w-100" Onclick="Hamming()">konwertuj</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="card  col-md-12 m-auto">
+                        <div class="card-body">
+                            <h5 class="card-title">Słowo po przekonwertowaniu na system binarny</h5>
+                            <hr class="w-100">
+                            <span id="binpacket">
+
+                        </span>
+                        </div>
+                    </div>
+                    <div class="card col-md-12 m-auto">
+                        <div class="card-body">
+                            <h5 class="card-title" id="title">Słowo po kodowaniu hamminga</h5>
+                            <hr class="w-100">
+                            <textarea class="form-control" id="outputconvert" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class=" offset-xl-3  offset-md-0  col-md-6 col-sm-12 py-2">
+                        <button  type="button" class="btn btn-secondary btn-block" Onclick="checkCode()">Sprawdź kod powyżej</button>
+                    </div>
+
+                    <div class="card col-md-12 m-auto">
+                        <div class="card-body">
+                            <h5 class="card-title">Słowo po sprawdzeniu poprawności za pomoca kodu Hamminga</h5>
+                            <hr class="w-100">
+                            <span id="checkoutput">
+
+                        </span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+            </div>
+            <div class="tab-pane fade" id="crc" role="tabpanel" aria-labelledby="crc-tab">
+                <h2>
+                    CRC
+                    <hr class="w-50">
+                </h2>
+            </div>
+
+            <div class="tab-pane fade" id="compare" role="tabpanel" aria-labelledby="compare-tab">
+                <h2>
+                    Porównanie
+                    <hr class="w-50">
+                </h2>
+            </div>
+
+        </div>
+        </div>
+
+            <div class="col-xl-6 col-md-12">
+
+                <div class="col-md-12 m-auto">
+                    <button  type="button" class="btn btn-secondary btn-block" data-toggle="collapse" data-target="#Collapse" aria-expanded="false" aria-controls="multiCollapseExample2">Generacja zakłóceń</button>
+                </div>
+
+                <div class="card col-md-12 m-auto">
+                    <div class="collapse multi-collapse" id="Collapse">
+
+                        <div class="col-12">
+                            <label for="noiseFrequency">Wprowadź procentową szansę na wystąpienie szumu</label>
+                            <input type="number" min="0" max="100" class="form-control mb-2" id="noiseFrequency" value="50">
+                        </div>
+                        <hr class="w-100">
+                        <div class="form-group m-auto col-12">
+                            <label for="typeOfNoise">Typ szumu</label>
+                            <select id="typeOfNoise" class="form-control">
+                                <option selected>Każdy bit</option>
+                                <option>Pojedynczy bit w słowie</option>
+                            </select>
+                        </div>
+
+                        <hr class="w-100">
+                        <div class="w-50 m-auto">
+                            <button  type="button" class="btn btn-secondary m-auto w-100"  id="noiseHamming" style="display: block"  data-toggle="modal" data-target="#NoiseModal"  Onclick="enterNoise()">Wygeneruj szum</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="col-md-12 m-auto" id="repairButton">
+                    <button  type="button" class="btn btn-secondary btn-block" data-toggle="collapse" data-target="#repairCode" aria-expanded="false" aria-controls="multiCollapseExample2">Wyświetl poprawiony kod</button>
+                </div>
+
+                <div class="card col-md-12 m-auto" id="repairCard">
+                    <div class="collapse multi-collapse" id="repairCode">
+                        <div class="card-body">
+                            <h5 class="card-title">Słowo po naprawieniu błędów</h5>
+                            <hr class="w-100">
+                            <span id="repairoutput">
+
+                            </span>
+                        </div>
+                        <div class="card-body">
+
+                            <h5 class="card-title">Słowo po odkodowaniu</h5>
+                            <hr class="w-100">
+                            <span id="decodeOutput">
+
+                        </span>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-12 m-auto" id="recivedButton">
+                    <button  type="button" class="btn btn-secondary btn-block" data-toggle="collapse" data-target="#recivedCode" aria-expanded="false" aria-controls="multiCollapseExample2">Wyświetl poprawiony kod</button>
+                </div>
+
+                <div class="card col-md-12 m-auto" id="recivedCard">
+                    <div class="collapse multi-collapse" id="recivedCode">
+                        <div class="card-body">
+                            <h5 class="card-title">Słowo po odkodowaniu</h5>
+                            <hr class="w-100">
+                            <span id="recivedOutput">
+
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12 m-auto my-4">
+                    <button  type="button" class="btn btn-secondary btn-block" data-toggle="collapse" data-target="#Difference" aria-expanded="false" aria-controls="multiCollapseExample2">Wyświetl porównanie</button>
+                </div>
+
+                <div class="card  col-md-12 m-auto">
+                    <div class="collapse multi-collapse" id="Difference">
+                        <div class="card-body card-body-compare">
+                            <h5 class="card-title">Porównanie </h5>
+
+                            <hr class="w-100">
+                            Wprowadzone dane<br>
+                            <span id="input"></span>
+                            <hr class="w-100">
+                            Wyjściowe dane<br>
+                            <span id="output"></span>
+
+                            <hr class="w-100">
+                            Wprowadzone dane<br>
+                            <span id="differenceOutput"></span>
+
+                            <hr class="w-100">
+                            Zakłócone dane<br>
+                            <span id="differenceOutput1"></span>
+                            <hr class="w-100">
+
+                            Poprawione dane<br>
+                            <span id="differenceOutput2"></span>
+                            <hr class="w-100">
+
+                            Procent zgodności danych:
+                            <span id="compatibility">
+                           </span>
+                            <hr class="w-100">
+                            Liczba błędów:
+                            <span id="numberOfErrors">
+                            </span>
+                            <hr class="w-100">
+                            Liczba wykrytych błędów:
+                            <span id="numberOfDetect">
+                            </span>
+
+                            <hr class="w-100">
+                            Liczba naprawionych błędów:
+                            <span id="numberOfRepaired">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Okienko szumu -->
+    <div class="modal fade" id="NoiseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    Szum został wygenerowany <hr> Sprawdź kod jeszcze raz!
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+</body>
+<script src="js/bootstrap.min.js"></script>
+
+</html>

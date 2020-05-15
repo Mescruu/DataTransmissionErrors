@@ -1,0 +1,43 @@
+body{
+    background-color: #f1f1f1;
+}
+.navbar-brand{
+ font-size: 25px;
+}
+
+.nav-pills .nav-link{
+    color: white;
+    margin-left: 10px;
+    border: 1px solid whitesmoke;
+    height: 100%;
+    width: 200px !important;
+    text-align: center;
+}
+.nav-item{
+    margin-bottom: 10px;
+    margin-top: 10px;
+
+}
+
+.nav-pills .nav-link.active{
+    background-color: whitesmoke;
+    color: black;
+    border-radius: 0px;
+}
+
+h1, h2{
+    text-align: center;
+}
+
+.card-body{
+    max-height: 300px !important;
+    overflow-y: auto;
+}
+.card-body-compare{
+    max-height: 70vh !important;
+    overflow-y: auto;
+}
+.modal-dialog{
+    max-width: 350px !important;
+}
+
