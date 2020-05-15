@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ed9ac1ab-ad99-4d73-b829-a157ded77ce7" name="Default Changelist" comment="" />
+    <list default="true" id="ed9ac1ab-ad99-4d73-b829-a157ded77ce7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,7 +35,7 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -41,6 +43,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Lenovo\Desktop" />
       <recent name="D:\Moje dokumenty\Freeline" />
     </key>
   </component>
@@ -71,7 +74,7 @@
       <workItem from="1589384325146" duration="879000" />
       <workItem from="1589476590070" duration="13219000" />
       <workItem from="1589530164348" duration="145000" />
-      <workItem from="1589532593075" duration="1561000" />
+      <workItem from="1589532593075" duration="1586000" />
     </task>
     <servers />
   </component>
@@ -79,6 +82,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="729" y="323" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1589535506790">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="729" y="323" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589535506790" />
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1589234966278">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
