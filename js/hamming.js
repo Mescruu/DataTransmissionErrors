@@ -171,6 +171,10 @@ function checkCode() {
         if(checksum!==0){
             word =  Array.from(words[i]);
             var j = 0;
+
+            document.getElementById("checkoutput").innerHTML =document.getElementById("checkoutput").innerHTML + " ";
+            document.getElementById("repairoutput").innerHTML =document.getElementById("repairoutput").innerHTML + " ";
+
             for(j=0; j<word.length;j++){
                 if(j===(word.length - checksum)){
                     document.getElementById("checkoutput").innerHTML = document.getElementById("checkoutput").innerHTML +"<b>"+ word[j]+"</b>";

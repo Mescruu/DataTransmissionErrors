@@ -1,7 +1,30 @@
 var typeOfCoding;
 
+function setHome() {
+    typeOfCoding="home";
+
+    document.getElementById('Author').style.display = 'block';
+
+    document.getElementById('NoiseButton').style.display = 'none';
+    document.getElementById('NoiseCard').style.display = 'none';
+    document.getElementById('differenceButton').style.display = 'none';
+    document.getElementById('DifferenceCard').style.display = 'none';
+
+    document.getElementById('repairButton').style.display = 'none';
+    document.getElementById('repairCard').style.display = 'none';
+    document.getElementById('recivedButton').style.display = 'none';
+    document.getElementById('recivedCard').style.display = 'none';
+}
+
 function setParrity() {
-typeOfCoding="Parrity";
+    typeOfCoding="Parrity";
+
+    document.getElementById('Author').style.display = 'none';
+
+    document.getElementById('NoiseButton').style.display = 'block';
+    document.getElementById('NoiseCard').style.display = 'block';
+    document.getElementById('differenceButton').style.display = 'block';
+    document.getElementById('DifferenceCard').style.display = 'block';
 
     document.getElementById('repairButton').style.display = 'none';
     document.getElementById('repairCard').style.display = 'none';
@@ -13,6 +36,13 @@ typeOfCoding="Parrity";
 function setHamming() {
     typeOfCoding="Hamming";
 
+    document.getElementById('Author').style.display = 'none';
+
+    document.getElementById('NoiseButton').style.display = 'block';
+    document.getElementById('NoiseCard').style.display = 'block';
+    document.getElementById('differenceButton').style.display = 'block';
+    document.getElementById('DifferenceCard').style.display = 'block';
+
     document.getElementById('repairButton').style.display = 'block';
     document.getElementById('repairCard').style.display = 'block';
 
@@ -22,6 +52,14 @@ function setHamming() {
 }
 function setCRC() {
     typeOfCoding="CRC";
+
+    document.getElementById('Author').style.display = 'none';
+
+    document.getElementById('NoiseButton').style.display = 'block';
+    document.getElementById('NoiseCard').style.display = 'block';
+    document.getElementById('differenceButton').style.display = 'block';
+    document.getElementById('DifferenceCard').style.display = 'block';
+
     document.getElementById('repairButton').style.display = 'block';
     document.getElementById('repairCard').style.display = 'block';
 
@@ -200,8 +238,8 @@ function enterNoise() {
         }
 
     }
-    else{
-        //alert ("słowa: "+words);
+    if(document.getElementById("typeOfNoise").value==="Pojedynczy bit w słowie")
+    {  //alert ("słowa: "+words);
 
         for(i=0;i<words.length;i++) {
             var word = words[i];
@@ -257,4 +295,172 @@ function enterNoise() {
             }
         }
     }
+
+
+    if(document.getElementById("typeOfNoise").value==="Pojedynczy bit w tekście")
+    {  //alert ("słowa: "+words);
+
+        var wordPos = Math.floor(Math.random() * (+(words.length-1) - +0)) + +0;
+        var word = words[wordPos]; //wylosuj jedno słowo
+
+            random = Math.floor(Math.random() * (+max - +min)) + +min;  //losowa szansa na wygenerowanie szumu
+
+            if(random <= noiseFrequency) {  //jeżeli random jest mniejszy/rowny czestotliwosci szumu wtedy zmieniony bit na przeciwny
+
+                var pos = Math.floor(Math.random() * (+word.length-1 - +0)) + +0;  //który z bitów może być zamieniony
+
+                if(word[pos]==="1"){
+
+                    //alert("word["+pos+"] = " + word[pos]);
+                    word = word.substring(0, pos) + '0' + word.substring(pos+1);
+                    //alert("po zmianie word["+pos+"] = " + word[pos]);
+                }
+                else{
+                    if(word[pos]==="0"){
+
+                        //alert("word["+pos+"] = " + word[pos]);
+                        word = word.substring(0, pos) + '1' + word.substring(pos+1);
+                        //alert("po zmianie word["+pos+"] = " + word[pos]);
+                    }
+                }
+
+            }
+
+        words[wordPos] = word;
+
+            for(i=0;i<words.length;i++){
+                if(i===words.length-1){
+                    switch (typeOfCoding) {
+                        case "Parrity":
+                            document.getElementById("outputconvertParrity").value = document.getElementById("outputconvertParrity").value + words[i];
+                            break;
+                        case "Hamming":
+                            document.getElementById("outputconvert").value = document.getElementById("outputconvert").value + words[i];
+                            break;
+                        case "CRC":
+                            document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + words[i];
+                            break;
+                    }
+                }else{
+
+                    switch (typeOfCoding) {
+                        case "Parrity":
+                            document.getElementById("outputconvertParrity").value = document.getElementById("outputconvertParrity").value + words[i]+" ";
+                            break;
+                        case "Hamming":
+                            document.getElementById("outputconvert").value = document.getElementById("outputconvert").value + words[i]+" ";
+                            break;
+                        case "CRC":
+                            document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + words[i]+" ";
+                            break;
+                    }
+                }
+            }
+    }
+
+
+    if(document.getElementById("typeOfNoise").value==="Bit kontrolny oraz kod w pojedynczym słowie w tekście")
+    {  //alert ("słowa: "+words);
+
+        var wordPos = Math.floor(Math.random() * (+(words.length-1) - +0)) + +0; //ktore słowo będzie zmieniane
+        var word = words[wordPos]; //ustal to slowo
+
+        random = Math.floor(Math.random() * (+max - +min)) + +min;  //losowa szansa na wygenerowanie szumu
+        var controlBits = [];
+        var textBits = [];
+        var controlBitsCounter = 0;
+        var textBitsCounter = 0;
+
+        if(random <= noiseFrequency) {  //jeżeli random jest mniejszy/rowny czestotliwosci szumu wtedy zmieniony bit na przeciwny
+
+            var pos1=0;
+            var pos2=0;
+
+            alert(typeOfCoding);
+
+
+            switch (typeOfCoding) {
+                case "Parrity":
+
+                    pos2 = Math.floor(Math.random() * (+word.length-1 - +1)) + +1;  //który z bitów może być zamieniony (tylko te po 1 są tekstem
+
+                    break;
+                case "Hamming":
+                    for (i =0;i<word.length;i++){
+                        if(IsPowerOfTwo(word.length-i)===false) { //jeżeli pozycja nie jest liczbą podniesioną do potęgi 2
+                            textBits[textBitsCounter]=word[i];
+                            textBitsCounter++;
+                        }else
+                        {
+                            controlBits[controlBitsCounter]=word[i];
+                            controlBitsCounter++;
+                        }
+                    }
+                    pos1 = textBits[Math.floor(Math.random() * (+textBits.length-1 - +0)) + +0];  //który z bitów może być zamieniony
+                    pos2 = controlBits[Math.floor(Math.random() * (+controlBits.length-1 - +0)) + +0];  //który z bitów może być zamieniony
+
+                    break;
+                case "CRC":
+                    document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + words[i];
+                    break;
+            }
+
+            word = word.split('');
+
+            if(word[pos1]==="1"){
+                word[pos1] = '0';
+            }
+            else{
+                if(word[pos1]==="0"){
+                    word[pos1] = '1';
+
+                }
+            }
+
+            if(word[pos2]==="1"){
+                word[pos2] = '0';
+            }
+            else{
+                if(word[pos2]==="0"){
+                    word[pos2] = '1';
+                }
+            }
+
+            word = word.join('');
+
+        }
+
+
+        words[wordPos] = word;
+
+        for(i=0;i<words.length;i++){
+            if(i===words.length-1){
+                switch (typeOfCoding) {
+                    case "Parrity":
+                        document.getElementById("outputconvertParrity").value = document.getElementById("outputconvertParrity").value + words[i];
+                        break;
+                    case "Hamming":
+                        document.getElementById("outputconvert").value = document.getElementById("outputconvert").value + words[i];
+                        break;
+                    case "CRC":
+                        document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + words[i];
+                        break;
+                }
+            }else{
+
+                switch (typeOfCoding) {
+                    case "Parrity":
+                        document.getElementById("outputconvertParrity").value = document.getElementById("outputconvertParrity").value + words[i]+" ";
+                        break;
+                    case "Hamming":
+                        document.getElementById("outputconvert").value = document.getElementById("outputconvert").value + words[i]+" ";
+                        break;
+                    case "CRC":
+                        document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + words[i]+" ";
+                        break;
+                }
+            }
+        }
+    }
+
 }
