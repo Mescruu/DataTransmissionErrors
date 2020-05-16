@@ -42,7 +42,7 @@
                 <div class="collapse navbar-collapse justify-content-center " id="navbarText">
                     <ul class="nav nav-pills" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Strona główna</a>
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true" onclick="setHome();">Strona główna</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="parrity-tab" data-toggle="tab" href="#parrity" role="tab" aria-controls="parrity" aria-selected="false" onclick="setParrity();">Kontrola parzystości </a>
@@ -263,11 +263,11 @@
 
             <div class="col-xl-6 col-md-12">
 
-                <div class="col-md-12 m-auto">
+                <div class="col-md-12 m-auto" id="NoiseButton" style="display: none" >
                     <button  type="button" class="btn btn-secondary btn-block" data-toggle="collapse" data-target="#Collapse" aria-expanded="false" aria-controls="multiCollapseExample2">Generacja zakłóceń</button>
                 </div>
 
-                <div class="card col-md-12 m-auto">
+                <div class="card col-md-12 m-auto" id="NoiseCard" style="display: none" >
                     <div class="collapse multi-collapse" id="Collapse">
 
                         <div class="col-12">
@@ -280,6 +280,9 @@
                             <select id="typeOfNoise" class="form-control">
                                 <option selected>Każdy bit</option>
                                 <option>Pojedynczy bit w słowie</option>
+                                <option>Pojedynczy bit w tekście</option>
+                                <option>Bit kontrolny oraz kod w pojedynczym słowie w tekście</option>
+
                             </select>
                         </div>
 
@@ -293,11 +296,11 @@
 
 
 
-                <div class="col-md-12 m-auto" id="repairButton">
+                <div class="col-md-12 m-auto" id="repairButton" style="display: none" >
                     <button  type="button" class="btn btn-secondary btn-block" data-toggle="collapse" data-target="#repairCode" aria-expanded="false" aria-controls="multiCollapseExample2">Wyświetl poprawiony kod</button>
                 </div>
 
-                <div class="card col-md-12 m-auto" id="repairCard">
+                <div class="card col-md-12 m-auto" id="repairCard" style="display: none" >
                     <div class="collapse multi-collapse" id="repairCode">
                         <div class="card-body">
                             <h5 class="card-title">Słowo po naprawieniu błędów</h5>
@@ -319,7 +322,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-12 m-auto" id="recivedButton">
+                <div class="col-md-12 m-auto" id="recivedButton" style="display: none" >
                     <button  type="button" class="btn btn-secondary btn-block" data-toggle="collapse" data-target="#recivedCode" aria-expanded="false" aria-controls="multiCollapseExample2">Wyświetl poprawiony kod</button>
                 </div>
 
@@ -336,11 +339,11 @@
                 </div>
 
 
-                <div class="col-md-12 m-auto my-4">
+                <div class="col-md-12 m-auto my-4"  id="differenceButton" style="display: none" >
                     <button  type="button" class="btn btn-secondary btn-block" data-toggle="collapse" data-target="#Difference" aria-expanded="false" aria-controls="multiCollapseExample2">Wyświetl porównanie</button>
                 </div>
 
-                <div class="card  col-md-12 m-auto">
+                <div class="card  col-md-12 m-auto" id="DifferenceCard" style="display: none" >
                     <div class="collapse multi-collapse" id="Difference">
                         <div class="card-body card-body-compare">
                             <h5 class="card-title">Porównanie </h5>
@@ -384,6 +387,26 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="card col-md-12 m-auto py-4" id="Author">
+                    <h1>
+                        Albert Woś
+                    </h1>
+                    <hr>
+                    <h3>
+                        IMST 1.4/8
+                    </h3>
+                    <hr>
+                    <h3>
+                       student Politechniki Lubelskiej
+                    </h3>
+                    <hr>
+
+                    <div class="logo">
+                        <img src="img/logoP.png" alt="">
+                    </div>
+                </div>
+
         </div>
 
         </div>
