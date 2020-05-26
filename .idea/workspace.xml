@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ed9ac1ab-ad99-4d73-b829-a157ded77ce7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/js/crc.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/crc.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/crc.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/hamming.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/hamming.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -82,6 +81,10 @@
       <workItem from="1589535620054" duration="1450000" />
       <workItem from="1589662188630" duration="4756000" />
       <workItem from="1589724904935" duration="6108000" />
+      <workItem from="1589902259436" duration="257000" />
+      <workItem from="1589904611231" duration="22209000" />
+      <workItem from="1590433653420" duration="2634000" />
+      <workItem from="1590503099208" duration="7945000" />
     </task>
     <servers />
   </component>
@@ -105,23 +108,29 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="681" y="261" width="570" height="524" key="StructurePopup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589482113955" />
-    <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1589724916864">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2576" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1590503099959">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589724916864" />
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589902267100" />
+    <state x="2576" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590503099959" />
     <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1589384324694" />
     <state x="606" y="135" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1589476992514">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="606" y="135" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589476992514" />
+    <state x="2689" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1590506345480">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2689" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590506345480" />
     <state x="591" y="65" width="737" height="909" key="find.popup" timestamp="1589484396275">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="591" y="65" width="737" height="909" key="find.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589484396275" />
-    <state x="616" y="240" key="run.anything.popup" timestamp="1589484437320">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2536" y="240" key="run.anything.popup" timestamp="1589913711246">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="616" y="240" key="run.anything.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589484437320" />
+    <state x="2536" y="240" key="run.anything.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589913711246" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1589663736071">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

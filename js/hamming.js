@@ -99,7 +99,7 @@ function hamming(parrityBits,controlTable, text) {
     document.getElementById("title").innerText="Słowo po kodowaniu hamminga";
 
     var i;
-    var  code = Array.from('0'.repeat(text.length+parrityBits)) //utworzenie wyzerowanej zmiennej o odpowiedniej długości
+    var  code = Array.from('0'.repeat(text.length+parrityBits)); //utworzenie wyzerowanej zmiennej o odpowiedniej długości
     var binPosition=0;
 
     var j = (text.length-1); //indeks ostatniego elementu tablicy
