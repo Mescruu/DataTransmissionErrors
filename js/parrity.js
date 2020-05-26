@@ -229,5 +229,4 @@ function checkParrityDifference() {
     document.getElementById("numberOfErrors").innerText=mistakeCounter;
     document.getElementById("numberOfDetect").innerText=detectedMistakeCounter;
     document.getElementById("numberOfRepaired").innerText="brak";
-
 }

@@ -14,6 +14,10 @@ function setHome() {
     document.getElementById('repairCard').style.display = 'none';
     document.getElementById('recivedButton').style.display = 'none';
     document.getElementById('recivedCard').style.display = 'none';
+
+    document.getElementById('HammingOption').style.display = 'none';
+    document.getElementById('CompareOption').style.display = 'none';
+
 }
 
 function setParrity() {
@@ -32,6 +36,9 @@ function setParrity() {
     document.getElementById('recivedButton').style.display = 'block';
     document.getElementById('recivedCard').style.display = 'block';
 
+    document.getElementById('HammingOption').style.display = 'none';
+    document.getElementById('CompareOption').style.display = 'none';
+
 }
 function setHamming() {
     typeOfCoding="Hamming";
@@ -49,6 +56,8 @@ function setHamming() {
     document.getElementById('recivedButton').style.display = 'none';
     document.getElementById('recivedCard').style.display = 'none';
 
+    document.getElementById('HammingOption').style.display = 'block';
+    document.getElementById('CompareOption').style.display = 'none';
 }
 function setCRC() {
     typeOfCoding="CRC";
@@ -60,12 +69,36 @@ function setCRC() {
     document.getElementById('differenceButton').style.display = 'block';
     document.getElementById('DifferenceCard').style.display = 'block';
 
-    document.getElementById('repairButton').style.display = 'block';
-    document.getElementById('repairCard').style.display = 'block';
+    document.getElementById('repairButton').style.display = 'none';
+    document.getElementById('repairCard').style.display = 'none';
 
-    document.getElementById('recivedButton').style.display = 'none';
-    document.getElementById('recivedCard').style.display = 'none';
+    document.getElementById('recivedButton').style.display = 'block';
+    document.getElementById('recivedCard').style.display = 'block';
+
+    document.getElementById('HammingOption').style.display = 'none';
+    document.getElementById('CompareOption').style.display = 'none';
 }
+
+function setCompare() {
+    typeOfCoding="CRC";
+
+    document.getElementById('Author').style.display = 'none';
+
+    document.getElementById('NoiseButton').style.display = 'block';
+    document.getElementById('NoiseCard').style.display = 'block';
+    document.getElementById('differenceButton').style.display = 'block';
+    document.getElementById('DifferenceCard').style.display = 'block';
+
+    document.getElementById('repairButton').style.display = 'none';
+    document.getElementById('repairCard').style.display = 'none';
+
+    document.getElementById('recivedButton').style.display = 'block';
+    document.getElementById('recivedCard').style.display = 'block';
+
+    document.getElementById('HammingOption').style.display = 'none';
+    document.getElementById('CompareOption').style.display = 'none';
+}
+
 
 function makeword() {
     var length = Math.random() * 10+1;
@@ -131,7 +164,6 @@ function onTypeChange(){
                 document.getElementById('genereteWordParrity').style.display = 'block';
                 document.getElementById('genereteDecParrity').style.display = 'none';
                 document.getElementById('genereteBinParrity').style.display = 'none';
-
             }
             if(document.getElementById('typeOfInputParrity').value == "Liczba binarna") {
                 document.getElementById('genereteWordParrity').style.display = 'none';
@@ -166,6 +198,22 @@ function onTypeChange(){
 
             break;
         case "CRC":
+            if(document.getElementById('typeOfInputCRC').value == "Tekst") {
+                document.getElementById('genereteWordCRC').style.display = 'block';
+                document.getElementById('genereteDecCRC').style.display = 'none';
+                document.getElementById('genereteBinCRC').style.display = 'none';
+
+            }
+            if(document.getElementById('typeOfInputCRC').value == "Liczba binarna") {
+                document.getElementById('genereteWordCRC').style.display = 'none';
+                document.getElementById('genereteDecCRC').style.display = 'none';
+                document.getElementById('genereteBinCRC').style.display = 'block';
+            }
+            if(document.getElementById('typeOfInputCRC').value == "Liczba decymalna") {
+                document.getElementById('genereteWordCRC').style.display = 'none';
+                document.getElementById('genereteDecCRC').style.display = 'block';
+                document.getElementById('genereteBinCRC').style.display = 'none';
+            }
 
             break;
         default:break;

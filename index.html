@@ -250,6 +250,96 @@
                     CRC
                     <hr class="w-50">
                 </h2>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="my-4">
+                            <div class="form-row align-items-center  col-md-12 m-auto">
+                                <div class="col-12">
+                                    <label for="thing2convertCRC">Wprowadź słowo</label>
+                                    <input type="text" class="form-control mb-2" id="thing2convertCRC" placeholder="  ">
+                                </div>
+
+                                <hr class="w-100">
+                                <div class="form-group m-auto col-12">
+                                    <label for="typeOfInputCRC">Typ słowa</label>
+                                    <select id="typeOfInputCRC" class="form-control" onchange="onTypeChange()">
+                                        <option selected>Liczba decymalna</option>
+                                        <option>Liczba binarna</option>
+                                        <option>Tekst</option>
+                                    </select>
+                                </div>
+                                <div class="form-group m-auto col-12" id="genereteWordCRC" style="display: none">
+                                    <button  type="button" class="btn btn-secondary w-100" Onclick="GenerateWord()">Generuj losowe słowo (1-12)</button>
+                                </div>
+                                <div class="form-group m-auto col-12" id="genereteDecCRC">
+                                    <button  type="button" class="btn btn-secondary w-100" Onclick="GenerateDec()">Generuj losową liczbę (1-99)</button>
+                                </div>
+                                <div class="form-group m-auto col-12" id="genereteBinCRC" style="display: none">
+                                    <button  type="button" class="btn btn-secondary w-100" Onclick="GenerateBin()">Generuj losową liczbę (1-99)</button>
+                                </div>
+
+                                <hr class="w-100">
+
+                                <div class="form-group m-auto col-12">
+                                    <label for="typeOfCRC">Typ CRC</label>
+                                    <select id="typeOfCRC" class="form-control" onchange="onCRCTypeChange()">
+                                        <option selected>CRC 12</option>
+                                        <option>CRC 16</option>
+                                        <option>CRC 16 REVERSE</option>
+                                        <option>CRC 32</option>
+                                        <option>SDLC</option>
+                                        <option>SDLC REVERSE</option>
+                                        <option>CRC-ITU</option>
+                                        <option>ATM</option>
+                                    </select>
+                                </div>
+
+                                <hr class="w-100">
+
+                                <div class=" w-50 m-auto">
+                                    <button  type="button" class="btn btn-secondary w-100" Onclick="crc()">konwertuj</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="card  col-md-12 m-auto">
+                            <div class="card-body">
+                                <h5 class="card-title">Słowo po przekonwertowaniu na system binarny</h5>
+                                <hr class="w-100">
+                                <span id="binpacketCRC">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card col-md-12 m-auto">
+                            <div class="card-body">
+                                <h5 class="card-title" id="titleCRC">Słowo po dodaniu sumy kontrolnej</h5>
+                                <hr class="w-100">
+                                <textarea class="form-control" id="outputconvertCRC" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" offset-xl-3  offset-md-0  col-md-6 col-sm-12 py-2">
+                        <button  type="button" class="btn btn-secondary btn-block" Onclick="verifyCRC()">Sprawdź kod powyżej</button>
+                    </div>
+
+
+
+                    <div class="card col-md-12 m-auto">
+                        <div class="card-body">
+                            <h5 class="card-title">Sprawdzenie poprawności kodu za pomocą algorytmu CRC.</h5>
+                            <hr class="w-100">
+                            <span id="checkoutputCRC">
+
+                        </span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
             </div>
 
             <div class="tab-pane fade" id="compare" role="tabpanel" aria-labelledby="compare-tab">
@@ -258,14 +348,6 @@
                     <hr class="w-50">
                 </h2>
             </div>
-
-            <div class="col-xl-6 col-md-12">
-
-                <div class="col-md-12 m-auto">
-                    <button  type="button" class="btn btn-secondary btn-block" onclick="crc()">Generacja zakłóceń</button>
-                </div>
-            </div>
-
             </div>
         </div>
 
@@ -289,7 +371,8 @@
                                 <option selected>Każdy bit</option>
                                 <option>Pojedynczy bit w słowie</option>
                                 <option>Pojedynczy bit w tekście</option>
-                                <option>Bit kontrolny oraz kod w pojedynczym słowie w tekście</option>
+                                <option id="HammingOption">Bit kontrolny oraz kod w pojedynczym słowie w tekście</option>
+                                <option id="CompareOption">Bit kontrolny oraz kod w pojedynczym słowie w tekście</option>
 
                             </select>
                         </div>

@@ -1,15 +1,21 @@
 //
-//https://4programmers.net/Algorytmy/Obliczanie_sum_kontrolnych_CRC-32
-//
+var firstCode="";
+/*crc_tab const table for ASCII codes */ //zmienna przechowująca tablice zmiennych
+var crc_tab=[256];
+var typeOfCRC="CRC 12";
+var polynomial=0x80F;
+var andWord=0x800;  //słowo z którym jest porównywany
+var checkSum= 0xfff; //słowo crc na początku
+var reversWord= 0xfff; //słowo crc na początku
+var bitCount= 12; //słowo crc na początku
 
-/* CRC-32 const table for ASCII codes */ //zmienna przechowująca tablice zmiennych
-var crc32_tab=[256];
-var EC_table=[];
+var tempWord = 0x000;
 
-
-var polynomial;
-
-function mirror_bits(x, nbits)
+ //         0x04C11DB7  32
+//          0x8000      16
+ //         0x800       12
+  //        0x80        8
+function reverse_bits(x, nbits)
 {
     var ret = 0;
     var i;
@@ -18,7 +24,6 @@ function mirror_bits(x, nbits)
             if(x & 1){
                 ret = ret|(1 << (nbits - i));
             }
-
             x= x>>1;
         }
     return ret;
@@ -27,9 +32,11 @@ function mirror_bits(x, nbits)
 function generate()
 {
 
-    //So far the algorithm is quite inefficient as it works bit by bit. For larger input data, this could be quite slow. But how can our CRC-8 algorithm be accelerated?
-    // The divident is the current crc byte value - and a byte can only take 256 different values. The polynomial (= divisor) is fixed. Why not precompute the division for each possible byte by the fixed polynomial and store these result in a lookup table? This is possible as the remainder is always the same for the same divident and divisor! Then the input stream can be processed byte by byte instead of bit by bit.
-    // Let's use our common example to demonstrate the process manually:
+    var shiftValue;
+
+    shiftValue=bitCount-8; //w zależności od ilości bitów należy przesunąć słowo
+
+    //alert(shiftValue);
 
     var ascii = 0;
     var i = 0, j = 0;
@@ -37,16 +44,19 @@ function generate()
     var asciiHelp;
     for(i = 0; i < 256; i++) // petla od 0 do 255
     {
-        ascii = mirror_bits(i, 8);//odwróć 8 najmłodszych bitów A[ascii;
-        ascii = ascii << 24; //
+        ascii = reverse_bits(i, 8);//odwróć 8 najmłodszych bitów A[ascii;    zależności od algorymtu należy odwrócić bity.
+
+        if(shiftValue!==0)
+        ascii = ascii << shiftValue; //
+
         //Operator przesunięcia w lewo powoduje, że bity w przesunięciu shift-expression są przesuwane w lewo o liczbę pozycji określoną przez dodatek.
         for(j = 0; j < 8; j++) //// petla od 0 do 7 bo tyle ma słowo bitów
         {
-            asciiHelp=(ascii & 0x80000000);
+            asciiHelp=(ascii & andWord);
 
             if(asciiHelp !== 0) //bramka logiczna AND między słowem a 0x80000000  //sprawdz czy słowo jest  // jesli jest rożne od 0
             {
-                ascii = (ascii << 1) ^ 0x04C11DB7;   // przesuń o 1 bit w lewo i xor'uj z wielomianem
+                ascii = (ascii << 1) ^ polynomial;   // przesuń o 1 bit w lewo i xor'uj z wielomianem
             }
             else
             {
@@ -54,10 +64,11 @@ function generate()
 
             }
         }
-        ascii = mirror_bits(ascii, 32);				//odwrocenie bitow
+        ascii = reverse_bits(ascii, shiftValue+8);				//odwrocenie bitow // zależności od algorymtu należy odwrócić bity.
 
-        crc32_tab[i]=ascii;
+        crc_tab[i]=ascii;
     }
+
 }
 
 function convertToString(text, bits) {
@@ -70,86 +81,136 @@ function convertToString(text, bits) {
 function crc()
 {
 
-    //przesłana wiadomość
-    var  massage = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'; //utworzenie wyzerowanej zmiennej o odpowiedniej długości
+    onCRCTypeChange();
 
-    //ustawienie wielomianu:
-    polynomial=0x04C11DB7;
+    //przesłana wiadomość
+    var  massage;
+    type = document.getElementById('typeOfInputCRC').value
+
+    if (type==="Liczba binarna") {
+     massage = parseInt(document.getElementById('thing2convertCRC').value, 2).toString();
+    }else{
+        massage = document.getElementById('thing2convertCRC').value;
+    }
+
+    alert(massage);
 
     generate(); //generowanie tabeli
 
+    firstCode =Array.from( massage).map((each)=>each.charCodeAt(0).toString(2)).join(" ") //z string na bin ze spacjami
+
+
     var massageToSend = codingCrc(massage);
 
-    alert("wiadomość z crc 1 : " + massageToSend);
+    document.getElementById('outputconvertCRC').value = massageToSend;
 
-    verify(massageToSend);
+   // alert("wiadomość z crc 1 : " + massageToSend);
 
- //  document.write(massageToSend +"<br>");
- //   document.write(polynomial.toString(2) +"<br>");
-
- // verify(massageToSend);
-
-// var bin =  1101010 0100100 0100001;
-//  alert(bin.toString(10));
-//do porównania http://crc32-checksum.waraxe.us/
-
-//  1100001 1100010 1100011
-// 1101010 0100100 0100000 111000010
+   // verify(massageToSend);
 
 }
 
 
-function chunkSubstr(str, size) {  //zamiana ciągu bitów na słowa
+function onCRCTypeChange(){
+    typeOfCRC = document.getElementById('typeOfCRC').value;
 
-    var numChunks = str.length / 8;
+        switch (typeOfCRC) {
+            case "CRC 12":
+                polynomial=0x80F; //ustawienie wartości wielomianu na podstawie tabeli https://en.wikipedia.org/wiki/Cyclic_redundancy_check
+                andWord=0x800;  //słowo z którym jest porównywany
+                checkSum = 0x000; //słowo crc na początku
+                 reversWord= 0x000; //słowo do dzięki któremu bedzie się odwracało sume kontrolną
+                 tempWord = 0x000; //słowo pomocniczne wypełnione zerami.
+                bitCount=12;
 
-    numChunks = Math.ceil(numChunks);
+                break;
+            case "CRC 16":  //CRC-16/USB
+                polynomial=0x8005; //ustawienie wartości wielomianu na podstawie tabeli https://en.wikipedia.org/wiki/Cyclic_redundancy_check
+                andWord=0x8000;  //słowo z którym jest porównywany
+                checkSum = 0xffff; //słowo crc na początku
+                reversWord= 0xffff; //słowo do dzięki któremu bedzie się odwracało sume kontrolną   //CRC-16/MODBUS bez odwracania
+                tempWord = 0x0000; //słowo pomocniczne wypełnione zerami.
+                bitCount=16;
 
-    const chunks = new Array(numChunks);
+                break;
+            case "CRC 16 REVERSE":
+                polynomial=0x4003; //ustawienie wartości wielomianu na podstawie tabeli https://en.wikipedia.org/wiki/Cyclic_redundancy_check (kolumna 5.) tak wynika z wielomianu
+                andWord=0x8000;  //słowo z którym jest porównywany
+                checkSum = 0xffff; //słowo crc na początku
+                reversWord= 0xffff; //słowo do dzięki któremu bedzie się odwracało sume kontrolną
+                tempWord = 0x0000; //słowo pomocniczne wypełnione zerami.
+                bitCount=16;
 
-    for (let i = numChunks - 1, o = str.length - size; i >= 0; i--, o -= size) {
+                break;
+            case "CRC 32":   //CRC-32
+                polynomial=0x04C11DB7; //ustawienie wartości wielomianu na podstawie tabeli https://en.wikipedia.org/wiki/Cyclic_redundancy_check
+                andWord=0x80000000;  //słowo z którym jest porównywany
+                checkSum = 0xffffFFFF; //słowo crc na początku
+                reversWord= 0xffffFFFF; //słowo do dzięki któremu bedzie się odwracało sume kontrolną
+                tempWord = 0x00000000; //słowo pomocniczne wypełnione zerami.
+                bitCount=32;
 
-       // alert("i = " + i);
+                break;
+            case "SDLC":
+                polynomial=0x1021; //ustawienie wartości wielomianu na podstawie tabeli https://en.wikipedia.org/wiki/Cyclic_redundancy_check
+                andWord=0x8000;  //słowo z którym jest porównywany
+                checkSum = 0xffff; //słowo crc na początku
+                reversWord= 0xffff; //słowo do dzięki któremu bedzie się odwracało sume kontrolną
+                tempWord = 0x0000; //słowo pomocniczne wypełnione zerami.
+                bitCount=16;
 
 
-        chunks[i] = String.fromCharCode(parseInt(str.substr(o, str.length), 2)); //dodanie do tablicy części tekstu
+                break;
+            case "SDLC REVERSE":
+                polynomial=0x0811; //ustawienie wartości wielomianu na podstawie tabeli https://en.wikipedia.org/wiki/Cyclic_redundancy_check
+                andWord=0x8000;  //słowo z którym jest porównywany
+                checkSum = 0xffff; //słowo crc na początku
+                reversWord= 0xffff; //słowo do dzięki któremu bedzie się odwracało sume kontrolną
+                tempWord = 0x0000; //słowo pomocniczne wypełnione zerami.
+                bitCount=16;
 
+                break;
+            case "CRC-ITU":
+                polynomial=0x1021; //ustawienie wartości wielomianu na podstawie tabeli https://en.wikipedia.org/wiki/Cyclic_redundancy_check //WEDŁUG PDFA TAKI SAM JAK SDLC
+                andWord=0x8000;  //słowo z którym jest porównywany
+                checkSum = 0xffff; //słowo crc na początku
+                reversWord= 0xffff; //słowo do dzięki któremu bedzie się odwracało sume kontrolną
+                tempWord = 0x0000; //słowo pomocniczne wypełnione zerami.
+                bitCount=16;
 
+                break;
+            case "ATM":
+                polynomial=0x07; //ustawienie wartości wielomianu na podstawie tabeli https://en.wikipedia.org/wiki/Cyclic_redundancy_check
+                andWord=0x80;  //słowo z którym jest porównywany
+                checkSum = 0xff; //słowo crc na początku  //CRC-8/ROHC (gdy checksum=0xff)
+                reversWord= 0xff; //słowo do dzięki któremu bedzie się odwracało sume kontrolną
+                tempWord = 0x00; //słowo pomocniczne wypełnione zerami.
+                bitCount=8;
 
-        //  alert("chunks["+i+"] " + chunks[i]);
-
-        str = str.substr(0, o); //uciecie zabranego konca
-
-      //  alert(str);
-
-        if(i===0 && chunks[0].length!==chunks[1].length){
-            chunks[0] = '0'.repeat(8-chunks[0].length)+chunks[0]; //dopełnienie zerami z przodu.
+                break;
+            default:break;
         }
 
-    }
-
-    //alert(chunks);
-    return chunks
 }
 
 function codingCrc(massage) {
-
-    //zmienne pomocne do zakodowania CRC
     var i;
     var temp = 0x0;
-    var temp2 = 0x00000000;
-    var crc32 = 0xffffffff;
+
 
     for(i = 0; i < massage.length; i++)
     {
-        temp = crc32_tab[(crc32 & 0xff) ^ massage.charCodeAt(i)];
-        temp2 = (crc32>>>8); //musi być >>> bo nie działa przy >>
-        crc32 = temp2 ^ temp ; //zmienna równa
+        temp = crc_tab[(checkSum & 0xff) ^ massage.charCodeAt(i)];
+        tempWord = (checkSum>>>8); //musi być >>> bo nie działa przy >>
+        checkSum = tempWord ^ temp ; //zmienna równa
     } //zmienna równa
 
-    crc32 =crc32 ^ 0xffffffff;  //odwrocenie na koncu
 
-    alert("CRC: " + ((crc32)>>>0).toString(10));  //przekonwertowanie na decymalne bez minusa
+    if(reversWord!==0){
+        checkSum =checkSum ^ reversWord;  //odwrocenie na koncu
+    }
+
+    //alert("CRC: " + ((checkSum)>>>0).toString(16));  //przekonwertowanie na decymalne bez minusa
 
     var massageToSend="";
     var mes="";
@@ -159,18 +220,26 @@ function codingCrc(massage) {
         mes +="0"+massage.charCodeAt(i).toString(2)+" ";
         massageToSend+=massage.charCodeAt(i).toString(2)+" ";
     }
-    massageToSend+=convertToString(crc32,32);  //32 bo 32 bity są w  kluczu CRC
+
+    massageToSend+=convertToString(checkSum,bitCount);  //32 bo 32 bity są w  kluczu CRC
+
+    firstCode+=" "+convertToString(checkSum,bitCount); //dodanie do tekstu CRC
 
     //alert(massageToSend);
    // alert(mes);
-
     return massageToSend;
-
 }
 
-function verify(massageToSend) {
+function verifyCRC() {
 
-   // alert(massageToSend);
+    var massageToSend = document.getElementById('outputconvertCRC').value;
+
+
+
+    //poprzez ponowne obliczenie sumy kontrolnej możliwe jest sprawdzenie poprawności przesłanych danych.
+
+    // alert(massageToSend);
+
 
     var massage = massageToSend.split(' '); //rozdzielenie pobranego tekstu na osobne wyrazy.
 
@@ -186,45 +255,200 @@ function verify(massageToSend) {
         }
     }
 
-  //  alert("checkMessage "+checkMessage);
-  //  alert("crcCode "+crcCode);
+    //  alert("checkMessage "+checkMessage);
+    //  alert("crcCode "+crcCode);
 
-   // alert("crc chunks "+String.fromCharCode(chunkSubstr(crcCode, 8).join(""), 2));
+    // alert("crc chunks "+String.fromCharCode(chunkSubstr(crcCode, 8).join(""), 2));
+
 
 
     var temp = 0x0;
-    var temp2 = 0x00000000;
-    var crc32 = 0xffffffff;
+
+    onCRCTypeChange();
 
     for(i = 0; i < checkMessage.length; i++)
     {
-        temp = crc32_tab[(crc32 & 0xff) ^ checkMessage.charCodeAt(i)];
-        temp2 = (crc32>>>8); //musi być >>> bo nie działa przy >>
-        crc32 = temp2 ^ temp ; //zmienna równa
+        temp = crc_tab[(checkSum & 0xff) ^ checkMessage.charCodeAt(i)];
+        tempWord = (checkSum>>>8); //musi być >>> bo nie działa przy >>
+        checkSum = tempWord ^ temp ; //zmienna równa
     } //zmienna równa
 
-    crc32 =crc32 ^ 0xffffffff;  //odwrocenie na koncu
 
-   // alert("crc32 "+parseInt(crc32.toString(2), 2));
-   // alert("crcCode " +   parseInt(crcCode, 2));
+    if(reversWord!==0){
+        checkSum =checkSum ^ reversWord;  //odwrocenie na koncu
+    }
+    var checkSumString;
 
-    var correct=false;
-    if(parseInt(crc32.toString(2), 2)===parseInt(crcCode, 2)){
-        correct=true;
+    alert(checkSum.toString(2).length);
+
+    if(checkSum.toString(2).length!==bitCount){
+        checkSumString = "0".repeat(bitCount-checkSum.toString(2).length)+checkSum.toString(2);
+    }else{
+        checkSumString = checkSum.toString(2);
     }
 
+    // alert("crc32 "+parseInt(crc32.toString(2), 2));
+    // alert("crcCode " +   parseInt(crcCode, 2));
 
+    var correct=false;
+    if(parseInt(checkSum.toString(2), 2)===parseInt(crcCode, 2)){
+        correct=true;
+        document.getElementById('checkoutputCRC').innerHTML="";
+        document.getElementById('checkoutputCRC').innerHTML=massageToSend;
+    }else{
+        massage[massage.length-1]=checkSum.toString(2);
+        document.getElementById('checkoutputCRC').innerHTML="";
+        for(i=0;i<massage.length-1;i++){
+            document.getElementById('checkoutputCRC').innerHTML+=massage[i]+" ";
+        }
+        document.getElementById('checkoutputCRC').innerHTML+='<span class="text-danger"> '+checkSumString+"</span>";
+    }
+
+    //alert(parseInt(checkSum.toString(2), 2));
+    //alert(parseInt(crcCode, 2));
 
     //checkMessage+=chunkSubstr(crcCode, 8).join("");
 
-   // alert(checkMessage);
+    // alert(checkMessage);
 
     //alert(codingCrc(checkMessage));
+
+    //decode
+    decodeCRC(massageToSend);
 
 
 
     return correct;
 }
+
+function decodeCRC(massage) {
+
+    var words = massage.split(" ");
+
+    var type = document.getElementById('typeOfInputCRC').value
+    var decodeWords="";
+
+    document.getElementById("recivedOutput").innerText="";
+
+    for(i=0;i<words.length-1;i++){
+        var word = words[i];
+
+        decodeWords =  String.fromCharCode(parseInt(word, 2));
+
+        document.getElementById("recivedOutput").innerText +=  decodeWords;
+    }
+
+    checkCRCDifference();
+}
+
+
+//// nie potrzebne na razie
+
+
+function chunkSubstr(str, size) {  //zamiana ciągu bitów na słowa
+
+    var numChunks = str.length / 8;
+
+    numChunks = Math.ceil(numChunks);
+
+    const chunks = new Array(numChunks);
+
+    for (let i = numChunks - 1, o = str.length - size; i >= 0; i--, o -= size) {
+
+        // alert("i = " + i);
+
+
+        chunks[i] = String.fromCharCode(parseInt(str.substr(o, str.length), 2)); //dodanie do tablicy części tekstu
+
+
+
+        //  alert("chunks["+i+"] " + chunks[i]);
+
+        str = str.substr(0, o); //uciecie zabranego konca
+
+        //  alert(str);
+            if(numChunks>1){
+                if(i===0 && chunks[0].length!==chunks[1].length){
+                    chunks[0] = '0'.repeat(8-chunks[0].length)+chunks[0]; //dopełnienie zerami z przodu.
+                }
+            }else{
+                if(i===0 && chunks[0].length!==size){
+                    chunks[0] = '0'.repeat(8-chunks[0].length)+chunks[0]; //dopełnienie zerami z przodu.
+                }
+            }
+    }
+   // alert(document.getElementById("thing2convertCRC").value);
+
+    //alert(chunks);
+    return chunks
+}
+
+function checkCRCDifference() {
+
+    var strF = document.getElementById("checkoutputCRC").innerText;
+
+    document.getElementById("differenceOutput1").innerHTML="";
+    document.getElementById("differenceOutput").innerHTML="";
+    document.getElementById("differenceOutput2").innerHTML="Brak możliwości";
+
+    if(strF[0]===' '){
+        strF = strF.substring(1, strF.length);
+    }
+    if(strF[strF.length-1]===' '){
+        strF = strF.substring(0, strF.length-1);
+    }
+
+    var strFirst =  strF.split(' ');
+    alert("first code: "+ firstCode);
+
+    var strGlobal =  firstCode.split(' ');
+
+    var checkoutputCRCText = document.getElementById("checkoutputCRC").innerHTML;
+    var checkoutputCRCTextSplit =  checkoutputCRCText.split(' ');
+
+    alert(checkoutputCRCTextSplit);
+    var i =0;
+
+    var mistakeCounter=0;
+    var detectedMistakeCounter=0;
+
+
+    for(i=0;i<strFirst.length;i++){
+
+        var checkoutputCRCWord = checkoutputCRCTextSplit[i]; //
+        if(checkoutputCRCWord[1]==="s"){  //jezeli jest span, wtedy oznacza, że jest źle
+
+            if(i===strFirst.length-1){
+                detectedMistakeCounter+=bitCount; //tylko wiadomo, że suma kontrolna się popsuła
+            }
+        }
+
+        document.getElementById("differenceOutput").innerHTML=document.getElementById("differenceOutput").innerHTML+" ";
+        document.getElementById("differenceOutput1").innerHTML=document.getElementById("differenceOutput1").innerHTML+" ";
+
+        if(strGlobal[i]!==strFirst[i])
+        {
+            mistakeCounter+=8;
+            document.getElementById("differenceOutput").innerHTML+='<d>'+strGlobal[i]+"</d>";
+            document.getElementById("differenceOutput1").innerHTML+='<span class="text-danger">'+strFirst[i]+"</span>";
+        }else{
+            document.getElementById("differenceOutput").innerHTML+=strGlobal[i];
+            document.getElementById("differenceOutput1").innerHTML+=strFirst[i];
+        }
+    }
+
+
+    document.getElementById("input").innerText= document.getElementById("thing2convertCRC").value;
+
+    document.getElementById("output").innerText= document.getElementById("recivedOutput").innerText;
+
+    document.getElementById("compatibility").innerText=(100-((mistakeCounter)*100)/(strFirst[0].length*strFirst.length));
+    document.getElementById("numberOfErrors").innerText=mistakeCounter;
+    document.getElementById("numberOfDetect").innerText=detectedMistakeCounter;
+    document.getElementById("numberOfRepaired").innerText="brak";
+}
+
+
 
 function verify2() {
 
