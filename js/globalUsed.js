@@ -101,7 +101,7 @@ function setCompare() {
 
 
 function makeword() {
-    var length = Math.random() * 10+1;
+    var length = Math.random() * 10+10;
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;

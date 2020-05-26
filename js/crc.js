@@ -97,8 +97,9 @@ function crc()
 
     generate(); //generowanie tabeli
 
-    firstCode =Array.from( massage).map((each)=>each.charCodeAt(0).toString(2)).join(" ") //z string na bin ze spacjami
+    firstCode =Array.from( massage).map((each)=>each.charCodeAt(0).toString(2)).join(" "); //z string na bin ze spacjami
 
+    document.getElementById('binpacketCRC').innerText=firstCode;
 
     var massageToSend = codingCrc(massage);
 
