@@ -55,7 +55,7 @@
                             <a class="nav-link" id="crc-tab" data-toggle="tab" href="#crc" role="tab" aria-controls="crc" aria-selected="false" onclick="setCRC();">CRC</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="compare-tab" data-toggle="tab" href="#compare" role="tab" aria-controls="compare" aria-selected="false" onclick="setAll();">Całkowite Kododawnie</a>
+                            <a class="nav-link" id="compare-tab" data-toggle="tab" href="#compare" role="tab" aria-controls="compare" aria-selected="false" onclick="setAll();">Całkowite Kodownie</a>
                         </li>
                     </ul>
                 </div>
@@ -82,6 +82,21 @@
                     <hr class="w-50">
                     Detekcja i korekcja błedów w transmisji danych
                 </h2>
+                <hr class="w-50">
+                <p class="text-justify description">
+                    Aplikacja ma na celu przedstawienie działania w poszczególnych krokach algorytmów detekcji oraz korekcji błędów  w transmisji danych.
+                    Pod uwagę wzięty został bit parzystości,  kodowania Hamminga oraz algorytm cyklicznej redundancji kodu o następujących typów:
+                    CRC 12, CRC 16, CRC 16 REVERSE, CRC 32, SDLC, SDLC REVERSE, CRC-ITU, CRC ATM. Dodatkowo w zakładce "Całkowite Kodowanie" do utworzenia ramki został wykorzystany kod Hamminga oraz wybrany CRC.
+                </p>
+
+                <p class="text-justify description">
+                 W każdej z podstron, znajdują się rozwijalne zakładki umożliwiające generowanie zakłóceń, o wpisanej w pola szansie na wystąpienie, a także typ szumu, który określa jakie bity, mają zostać wzięte pod uwagę.
+                </p>
+
+                <p class="text-justify description">
+                Oprócz możliwe jest rozwiniecia zakładki umożliwiającej sprawdzenie wygenerowanego kodu i jezeli jest to możliwe kodu poprawionego. Dodatkowo w zakładce "Wyświetl porównanie" znajdują się dane z porównania tekstu oraz kodu wprowadzonego z danymi odebranymi, po ewentualnych zakłóceniach.
+                </p>
+
             </div>
             <div class="tab-pane fade" id="parrity" role="tabpanel" aria-labelledby="parrity-tab">
 
@@ -217,7 +232,7 @@
                     </div>
                     <div class="card col-md-12 m-auto">
                         <div class="card-body">
-                            <h5 class="card-title" id="title">Słowo po kodowaniu hamminga</h5>
+                            <h5 class="card-title" id="title">Słowo po kodowaniu Hamminga</h5>
                             <hr class="w-100">
                             <textarea class="form-control" id="outputconvert" rows="3"></textarea>
                         </div>
@@ -609,6 +624,13 @@
                             Liczba naprawionych błędów:
                             <span id="numberOfRepaired">
                             </span>
+
+                            <div id="crcWarningDiv" style="display: none">
+                                <hr class="w-100">
+
+                                <span id="crcWarning" class="text-warning">
+                            </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -627,7 +649,7 @@
                     </h3>
                     <hr>
 
-                    <div class="logo">
+                    <div class="logo py-5">
                         <img src="img/logoP.png" alt="">
                     </div>
                 </div>

@@ -18,7 +18,9 @@ body{
     margin-top: 10px;
 
 }
-
+.description{
+    font-size: 18px;
+}
 .nav-pills .nav-link.active{
     background-color: whitesmoke;
     color: black;

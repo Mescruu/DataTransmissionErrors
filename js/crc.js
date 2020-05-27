@@ -94,7 +94,7 @@ function crc()
         massage = document.getElementById('thing2convertCRC').value;
     }
 
-    alert(massage);
+   // alert(massage);
 
     generate(); //generowanie tabeli
 
@@ -245,7 +245,7 @@ function verifyCRC() {
 
     var checkoutputCRCId;
     var massageToSend;
-    alert(typeOfCoding)
+    //alert(typeOfCoding)
 
     if(typeOfCoding==="All"){
         checkoutputCRCId = "checkoutputCRCAll";
@@ -255,8 +255,8 @@ function verifyCRC() {
         massageToSend = document.getElementById('outputconvertCRC').value;
     }
 
-    alert("massageToSend "+massageToSend);
-    alert(checkoutputCRCId);
+    //alert("massageToSend "+massageToSend);
+    //alert(checkoutputCRCId);
 
     //poprzez ponowne obliczenie sumy kontrolnej możliwe jest sprawdzenie poprawności przesłanych danych.
 
@@ -265,16 +265,16 @@ function verifyCRC() {
 
 
     var massage = massageToSend.split(' '); //rozdzielenie pobranego tekstu na osobne wyrazy.
-    alert("massage "+massage);
+    //alert("massage "+massage);
     var checkMessage="";
 
     if(massage[massage.length-1]===""){
         massage.pop(); //usunięcie ostatniego elementu talbicy
     }
 
-    alert("massage[massage.length-1] "+massage[massage.length-1]);
+   // alert("massage[massage.length-1] "+massage[massage.length-1]);
     var crcCode=massage[massage.length-1];
-    alert("crcCode"+crcCode);
+    //alert("crcCode"+crcCode);
     var i;
 
     for( i=0;i<massage.length;i++){
@@ -309,7 +309,7 @@ function verifyCRC() {
     }
     var checkSumString;
 
-    alert(checkSum.toString(2).length);
+    //alert(checkSum.toString(2).length);
 
     if(checkSum.toString(2).length!==bitCount){
         checkSumString = "0".repeat(bitCount-checkSum.toString(2).length)+checkSum.toString(2);
@@ -317,8 +317,8 @@ function verifyCRC() {
         checkSumString = checkSum.toString(2);
     }
 
-       alert("checkSum "+parseInt(checkSum.toString(2), 2));
-       alert("crcCode " +   parseInt(crcCode, 2));
+     //  alert("checkSum "+parseInt(checkSum.toString(2), 2));
+     //  alert("crcCode " +   parseInt(crcCode, 2));
 
     var correct=false;
     if(parseInt(checkSum.toString(2), 2)===parseInt(crcCode, 2)){
@@ -428,14 +428,14 @@ function checkCRCDifference() {
     }
 
     var strFirst =  strF.split(' ');
-    alert("first code: "+ firstCode);
+    //alert("first code: "+ firstCode);
 
     var strGlobal =  firstCode.split(' ');
 
     var checkoutputCRCText = document.getElementById("checkoutputCRC").innerHTML;
     var checkoutputCRCTextSplit =  checkoutputCRCText.split(' ');
 
-    alert(checkoutputCRCTextSplit);
+   // alert(checkoutputCRCTextSplit);
     var i =0;
 
     var mistakeCounter=0;

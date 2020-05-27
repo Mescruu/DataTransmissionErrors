@@ -19,8 +19,8 @@ function Hamming() {
         thing2ConvertId = "thing2convertHamming";
     }
 
-alert(type);
-    alert(thing2ConvertId);
+   // alert(type);
+   // alert(thing2ConvertId);
 
     switch (type) {
         case "Tekst":
@@ -68,7 +68,7 @@ function codeHamming(bin) {
 
         var  parrityBits =  0;
 
-        alert(bin.length);
+       // alert(bin.length);
 
         if (bin.length <=4) {
 
@@ -213,6 +213,7 @@ function checkCode() {
     var checkoutputId;
 
     if(typeOfCoding==="All"){
+        document.getElementById('crcWarningDiv').style.display = 'none'; //wyłączenie warninga przy porównaniu
         str =  document.getElementById("outputconvertAll").value;
         checkoutputId= "checkoutputHammingAll";
     }else{
@@ -244,7 +245,7 @@ function checkCode() {
                     document.getElementById(checkoutputId).innerHTML += "<b>"+ word[j]+"</b>";
 
                     var repairWord = repairCode(word[j]);
-                    document.getElementById("repairoutput").innerHTML +="<u>"+ repairWord +"</u>";
+                    document.getElementById("repairoutput").innerHTML +="<u><b>"+ repairWord +"</b></u>";
 
                 }else{
                     document.getElementById(checkoutputId).innerHTML += word[j];
@@ -352,7 +353,7 @@ function decodeHamming(str) {
                 if(i!==words.length-1){ //jezeli to nie jest ostatnie słowo, ponieważ na końcu jest CRC
                     decodeWords =  String.fromCharCode(parseInt(decodeWord, 2));
                 }else {
-                    break; //przerwij pętle
+                    continue; //przerwij pętle
                 }
                 break;
 
@@ -365,7 +366,7 @@ function decodeHamming(str) {
         document.getElementById("removeHammingOutput").innerText = textWithoutHamming;
     }
 
-    alert(textWithoutHamming);
+   // alert(textWithoutHamming);
 
     if(typeOfCoding==="All"){
         verifyCRC();
@@ -415,12 +416,15 @@ function checkDifference() {
     var repairedMistakeCounter=0;
     var detectedMistakeCounter=0;
 
+   // var differenceOutputText ="";
+    //var differenceOutput1Text ="";
+    //var differenceOutput2Text ="";
 
     for(i=0;i<strFirst.length;i++){
         if(strGlobal[i]===' '){
-            document.getElementById("differenceOutput").innerHTML=document.getElementById("differenceOutput").innerHTML+" ";
-            document.getElementById("differenceOutput2").innerHTML=document.getElementById("differenceOutput2").innerHTML+" ";
-            document.getElementById("differenceOutput1").innerHTML=document.getElementById("differenceOutput1").innerHTML+" ";
+            document.getElementById("differenceOutput").innerHTML+=" ";
+            document.getElementById("differenceOutput2").innerHTML+=" ";
+            document.getElementById("differenceOutput1").innerHTML+=" ";
 
             continue;
         }
@@ -432,28 +436,42 @@ function checkDifference() {
             document.getElementById("differenceOutput1").innerHTML+=strFirst[i];
         }
         if(strGlobal[i]===strRepaired[i]&&strFirst[i]!==strRepaired[i]){
-            document.getElementById("differenceOutput").innerHTML=document.getElementById("differenceOutput").innerHTML+'<span class="text-warning">'+strGlobal[i]+'</span>';
-            document.getElementById("differenceOutput2").innerHTML=document.getElementById("differenceOutput2").innerHTML+'<span class="text-success">'+strRepaired[i]+'</span>';
+            document.getElementById("differenceOutput").innerHTML+='<span class="text-warning" ><b>'+strGlobal[i]+'</b></span>';
+            document.getElementById("differenceOutput2").innerHTML+='<span class="text-success"><b>'+strRepaired[i]+'</b></span>';
             repairedMistakeCounter++;
         }else{
             if(strGlobal[i]!==strRepaired[i]&&strGlobal[i]!==strFirst[i]) {
-                document.getElementById("differenceOutput").innerHTML=document.getElementById("differenceOutput").innerHTML+'<span class="text-warning">'+strGlobal[i]+'</span>';
-                document.getElementById("differenceOutput2").innerHTML=document.getElementById("differenceOutput2").innerHTML+'<span class="text-danger">'+strRepaired[i]+'</span>';
+                document.getElementById("differenceOutput").innerHTML+='<span class="text-warning"><b>'+strGlobal[i]+'</b></span>';
+                document.getElementById("differenceOutput2").innerHTML+='<span class="text-danger"><b>'+strRepaired[i]+'</b></span>';
                 detectedMistakeCounter++;
             }
             else{
-                document.getElementById("differenceOutput").innerHTML=document.getElementById("differenceOutput").innerHTML+strGlobal[i];
-                document.getElementById("differenceOutput2").innerHTML=document.getElementById("differenceOutput2").innerHTML+strRepaired[i];
+                document.getElementById("differenceOutput").innerHTML+=strGlobal[i];
+                document.getElementById("differenceOutput2").innerHTML+=strRepaired[i];
             }
         }
     }
 
-    document.getElementById("input").innerText= document.getElementById("thing2convertHamming").value;
+
+    if(typeOfCoding==="All"){
+        var checkoutputCRCAllText = document.getElementById("checkoutputCRCAll").innerHTML;
+        var words = checkoutputCRCAllText.split(" ");
+        var word = words[words.length-1];
+        alert(word);
+        if(word[word.length-1]===">"){
+            document.getElementById('crcWarningDiv').style.display="block"; //wyłączenie warninga przy porównaniu
+            document.getElementById("crcWarning").innerHTML= '<b>Suma kontrolna jest niepoprawna! Dane mogą być uszkodzone</b>';
+        }
+        document.getElementById("input").innerText= document.getElementById("thing2convertAll").value;
+    }else{
+        document.getElementById("input").innerText= document.getElementById("thing2convertHamming").value;
+    }
     document.getElementById("output").innerText= document.getElementById("decodeOutput").innerText;
 
     document.getElementById("compatibility").innerText=(100-((mistakeCounter-repairedMistakeCounter)*100)/strFirst.length);
     document.getElementById("numberOfErrors").innerText=mistakeCounter;
     document.getElementById("numberOfDetect").innerText=repairedMistakeCounter;
     document.getElementById("numberOfRepaired").innerText=repairedMistakeCounter;
+
 
 }

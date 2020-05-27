@@ -583,15 +583,106 @@ function enterNoise() {
             }
         }
     }
+    if(document.getElementById("typeOfNoise").value==="Bit w bloku danych (Scenariusz 2)")
+    {
 
+        var wordPos = Math.floor(Math.random() * (+(words.length-2) - +0)) + +0;//który z bitów (oprócz ostatniego zostanie zmieniony
+        var word = words[wordPos]; //wylosuj jedno słowo
+
+        random = Math.floor(Math.random() * (+max - +min)) + +min;  //losowa szansa na wygenerowanie szumu
+
+        if(random <= noiseFrequency) {  //jeżeli random jest mniejszy/rowny czestotliwosci szumu wtedy zmieniony bit na przeciwny
+
+            var pos = Math.floor(Math.random() * (+word.length-1 - +0)) + +0;  //który z bitów może być zamieniony
+
+            if(word[pos]==="1"){
+
+                //alert("word["+pos+"] = " + word[pos]);
+                word = word.substring(0, pos) + '0' + word.substring(pos+1);
+                //alert("po zmianie word["+pos+"] = " + word[pos]);
+            }
+            else{
+                if(word[pos]==="0"){
+
+                    //alert("word["+pos+"] = " + word[pos]);
+                    word = word.substring(0, pos) + '1' + word.substring(pos+1);
+                    //alert("po zmianie word["+pos+"] = " + word[pos]);
+                }
+            }
+
+        }
+
+        words[wordPos] = word;
+
+        for(i=0;i<words.length;i++){
+            if(i===words.length-1){
+                        document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i];
+            }else{
+                        document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i]+" ";
+            }
+        }
+
+    }
+    if(document.getElementById("typeOfNoise").value==="Bit w bloku danych oraz bit w sumie kontrolnej (scenariusz 3)")
+    {
+
+        var wordPos = Math.floor(Math.random() * (+(words.length-2) - +0)) + +0;//który z bitów (oprócz ostatniego zostanie zmieniony
+        var word = words[wordPos]; //wylosuj jedno słowo
+        var wordCRC = words[words.length-1]; //ostatnie słowo
+
+        random = Math.floor(Math.random() * (+max - +min)) + +min;  //losowa szansa na wygenerowanie szumu
+
+        if(random <= noiseFrequency) {  //jeżeli random jest mniejszy/rowny czestotliwosci szumu wtedy zmieniony bit na przeciwny
+
+            var pos = Math.floor(Math.random() * (+word.length-1 - +0)) + +0;  //który z bitów może być zamieniony
+
+            word = mirrorBit(word, pos);
+
+            pos = Math.floor(Math.random() * (+word.length-1 - +0)) + +0;  //który z bitów może być zamieniony
+
+            wordCRC = mirrorBit(wordCRC, pos);
+        }
+
+        words[wordPos] = word;
+        words[words.length-1] = wordCRC;
+
+        for(i=0;i<words.length;i++){
+            if(i===words.length-1){
+                document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i];
+            }else{
+                document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i]+" ";
+            }
+        }
+
+    }
 }
+function mirrorBit(word, pos) {
 
+    if(word[pos]==="1"){
+
+        //alert("word["+pos+"] = " + word[pos]);
+        word = word.substring(0, pos) + '0' + word.substring(pos+1);
+        //alert("po zmianie word["+pos+"] = " + word[pos]);
+    }
+    else{
+        if(word[pos]==="0"){
+
+            //alert("word["+pos+"] = " + word[pos]);
+            word = word.substring(0, pos) + '1' + word.substring(pos+1);
+            //alert("po zmianie word["+pos+"] = " + word[pos]);
+        }
+    }
+    return word;
+}
 
 //Do ogólnego obliczenia
 function CodeAll(){
 
 //OBLICZANIE SUMY KONTROLNEJ
     onCRCTypeChange();
+
+    document.getElementById('crcWarningDiv').style.display = 'none'; //wyłączenie warninga przy porównaniu
+
 
     var  massage;
     type = document.getElementById('typeOfInputAll').value
@@ -614,7 +705,7 @@ function CodeAll(){
 
     var massageToSend = codingCrc(massage);
 
-    alert(massageToSend);
+    //alert(massageToSend);
 
     document.getElementById('crcOutput').innerHTML = massageToSend;
 
@@ -622,7 +713,7 @@ function CodeAll(){
 
     //OBLICZANIE HAMMINGA
 
-    alert("Hamming");
+   // alert("Hamming");
     Hamming(); //wyslanie ciagu binarnego z CRC
     //OBLICZANIE HAMMINGA
 }
