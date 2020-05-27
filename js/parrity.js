@@ -37,6 +37,8 @@ function Parrity() {
 
     firstCode = document.getElementById("outputconvertParrity").value;
 
+    //Po wszystkim sprawdź dane..
+    checkCodeParrity();
 }
 
 function codeParrity(bin) {

@@ -16,8 +16,11 @@ function setHome() {
     document.getElementById('recivedCard').style.display = 'none';
 
     document.getElementById('HammingOption').style.display = 'none';
-    document.getElementById('CompareOption').style.display = 'none';
+    document.getElementById('CompareOption1').style.display = 'none';
+    document.getElementById('CompareOption2').style.display = 'none';
 
+    document.getElementById('removeHammingCard').style.display = 'none';
+    document.getElementById('checkoutputCRCAllCard').style.display = 'none';
 }
 
 function setParrity() {
@@ -37,7 +40,11 @@ function setParrity() {
     document.getElementById('recivedCard').style.display = 'block';
 
     document.getElementById('HammingOption').style.display = 'none';
-    document.getElementById('CompareOption').style.display = 'none';
+    document.getElementById('CompareOption1').style.display = 'none';
+    document.getElementById('CompareOption2').style.display = 'none';
+
+    document.getElementById('checkoutputCRCAllCard').style.display = 'none';
+    document.getElementById('removeHammingCard').style.display = 'none';
 
 }
 function setHamming() {
@@ -57,7 +64,12 @@ function setHamming() {
     document.getElementById('recivedCard').style.display = 'none';
 
     document.getElementById('HammingOption').style.display = 'block';
-    document.getElementById('CompareOption').style.display = 'none';
+    document.getElementById('CompareOption1').style.display = 'none';
+    document.getElementById('CompareOption2').style.display = 'none';
+
+    document.getElementById('checkoutputCRCAllCard').style.display = 'none';
+    document.getElementById('removeHammingCard').style.display = 'none';
+
 }
 function setCRC() {
     typeOfCoding="CRC";
@@ -76,11 +88,17 @@ function setCRC() {
     document.getElementById('recivedCard').style.display = 'block';
 
     document.getElementById('HammingOption').style.display = 'none';
-    document.getElementById('CompareOption').style.display = 'none';
+    document.getElementById('CompareOption1').style.display = 'none';
+    document.getElementById('CompareOption2').style.display = 'none';
+
+    document.getElementById('checkoutputCRCAllCard').style.display = 'none';
+    document.getElementById('removeHammingCard').style.display = 'none';
+
+
 }
 
-function setCompare() {
-    typeOfCoding="CRC";
+function setAll() {
+    typeOfCoding="All";
 
     document.getElementById('Author').style.display = 'none';
 
@@ -89,14 +107,18 @@ function setCompare() {
     document.getElementById('differenceButton').style.display = 'block';
     document.getElementById('DifferenceCard').style.display = 'block';
 
-    document.getElementById('repairButton').style.display = 'none';
-    document.getElementById('repairCard').style.display = 'none';
+    document.getElementById('repairButton').style.display = 'block';
+    document.getElementById('repairCard').style.display = 'block';
 
-    document.getElementById('recivedButton').style.display = 'block';
-    document.getElementById('recivedCard').style.display = 'block';
+    document.getElementById('recivedButton').style.display = 'none';
+    document.getElementById('recivedCard').style.display = 'none';
 
     document.getElementById('HammingOption').style.display = 'none';
-    document.getElementById('CompareOption').style.display = 'none';
+    document.getElementById('CompareOption1').style.display = 'block';
+    document.getElementById('CompareOption2').style.display = 'block';
+
+    document.getElementById('checkoutputCRCAllCard').style.display = 'block';
+    document.getElementById('removeHammingCard').style.display = 'block';
 }
 
 
@@ -122,6 +144,10 @@ function GenerateWord(){
         case "CRC":
             document.getElementById('thing2convertCRC').value = makeword(); //zmienna do zakodowania
             break;
+        case "All":
+            document.getElementById('thing2convertAll').value = makeword(); //zmienna do zakodowania
+            break;
+
         default:break;
     }
 }
@@ -135,6 +161,9 @@ function GenerateBin(){
             break;
         case "CRC":
             document.getElementById('thing2convertCRC').value = Math.floor(Math.random()*99+1).toString(2); //zmienna do zakodowania
+            break;
+        case "All":
+            document.getElementById('thing2convertAll').value = Math.floor(Math.random()*99+1).toString(2); //zmienna do zakodowania
             break;
         default:break;
     }
@@ -151,6 +180,9 @@ function GenerateDec(){
         case "CRC":
             document.getElementById('thing2convertCRC').value = Math.floor(Math.random()*99+1); //zmienna do zakodowania
             break;
+        case "All":
+            document.getElementById('thing2convertAll').value = Math.floor(Math.random()*99+1); //zmienna do zakodowania
+            break;
         default:break;
     }
 }
@@ -160,17 +192,17 @@ function onTypeChange(){
     switch (typeOfCoding) {
         case "Parrity":
 
-            if(document.getElementById('typeOfInputParrity').value == "Tekst") {
+            if(document.getElementById('typeOfInputParrity').value === "Tekst") {
                 document.getElementById('genereteWordParrity').style.display = 'block';
                 document.getElementById('genereteDecParrity').style.display = 'none';
                 document.getElementById('genereteBinParrity').style.display = 'none';
             }
-            if(document.getElementById('typeOfInputParrity').value == "Liczba binarna") {
+            if(document.getElementById('typeOfInputParrity').value === "Liczba binarna") {
                 document.getElementById('genereteWordParrity').style.display = 'none';
                 document.getElementById('genereteDecParrity').style.display = 'none';
                 document.getElementById('genereteBinParrity').style.display = 'block';
             }
-            if(document.getElementById('typeOfInputParrity').value == "Liczba decymalna") {
+            if(document.getElementById('typeOfInputParrity').value === "Liczba decymalna") {
                 document.getElementById('genereteWordParrity').style.display = 'none';
                 document.getElementById('genereteDecParrity').style.display = 'block';
                 document.getElementById('genereteBinParrity').style.display = 'none';
@@ -179,18 +211,18 @@ function onTypeChange(){
             break;
         case "Hamming":
 
-            if(document.getElementById('typeOfInputHamming').value == "Tekst") {
+            if(document.getElementById('typeOfInputHamming').value === "Tekst") {
                 document.getElementById('genereteWordHamming').style.display = 'block';
                 document.getElementById('genereteDecHamming').style.display = 'none';
                 document.getElementById('genereteBinHamming').style.display = 'none';
 
             }
-            if(document.getElementById('typeOfInputHamming').value == "Liczba binarna") {
+            if(document.getElementById('typeOfInputHamming').value === "Liczba binarna") {
                 document.getElementById('genereteWordHamming').style.display = 'none';
                 document.getElementById('genereteDecHamming').style.display = 'none';
                 document.getElementById('genereteBinHamming').style.display = 'block';
             }
-            if(document.getElementById('typeOfInputHamming').value == "Liczba decymalna") {
+            if(document.getElementById('typeOfInputHamming').value === "Liczba decymalna") {
                 document.getElementById('genereteWordHamming').style.display = 'none';
                 document.getElementById('genereteDecHamming').style.display = 'block';
                 document.getElementById('genereteBinHamming').style.display = 'none';
@@ -198,25 +230,41 @@ function onTypeChange(){
 
             break;
         case "CRC":
-            if(document.getElementById('typeOfInputCRC').value == "Tekst") {
+            if(document.getElementById('typeOfInputCRC').value === "Tekst") {
                 document.getElementById('genereteWordCRC').style.display = 'block';
                 document.getElementById('genereteDecCRC').style.display = 'none';
                 document.getElementById('genereteBinCRC').style.display = 'none';
 
             }
-            if(document.getElementById('typeOfInputCRC').value == "Liczba binarna") {
+            if(document.getElementById('typeOfInputCRC').value === "Liczba binarna") {
                 document.getElementById('genereteWordCRC').style.display = 'none';
                 document.getElementById('genereteDecCRC').style.display = 'none';
                 document.getElementById('genereteBinCRC').style.display = 'block';
             }
-            if(document.getElementById('typeOfInputCRC').value == "Liczba decymalna") {
+            if(document.getElementById('typeOfInputCRC').value === "Liczba decymalna") {
                 document.getElementById('genereteWordCRC').style.display = 'none';
                 document.getElementById('genereteDecCRC').style.display = 'block';
                 document.getElementById('genereteBinCRC').style.display = 'none';
             }
-
             break;
-        default:break;
+        case "All":
+            if(document.getElementById('typeOfInputAll').value === "Tekst") {
+                document.getElementById('genereteWordAll').style.display = 'block';
+                document.getElementById('genereteDecAll').style.display = 'none';
+                document.getElementById('genereteBinAll').style.display = 'none';
+
+            }
+            if(document.getElementById('typeOfInputAll').value === "Liczba binarna") {
+                document.getElementById('genereteWordAll').style.display = 'none';
+                document.getElementById('genereteDecAll').style.display = 'none';
+                document.getElementById('genereteBinAll').style.display = 'block';
+            }
+            if(document.getElementById('typeOfInputAll').value === "Liczba decymalna") {
+                document.getElementById('genereteWordAll').style.display = 'none';
+                document.getElementById('genereteDecAll').style.display = 'block';
+                document.getElementById('genereteBinAll').style.display = 'none';
+            }
+            default:break;
     }
 }
 
@@ -237,6 +285,10 @@ function enterNoise() {
         case "CRC":
             str =  document.getElementById("outputconvertCRC").value;
             document.getElementById("outputconvertCRC").value="";
+            break;
+        case "All":
+            str =  document.getElementById("outputconvertAll").value;
+            document.getElementById("outputconvertAll").value="";
             break;
     }
 
@@ -280,6 +332,9 @@ function enterNoise() {
                     break;
                 case "CRC":
                     document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + strArray[i];
+                    break;
+                case "All":
+                    document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + strArray[i];
                     break;
             }
 
@@ -325,6 +380,9 @@ function enterNoise() {
                     case "CRC":
                         document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + word;
                         break;
+                    case "All":
+                        document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + word;
+                        break;
                 }
             }else{
 
@@ -337,6 +395,9 @@ function enterNoise() {
                         break;
                     case "CRC":
                         document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + word+" ";
+                        break;
+                    case "All":
+                        document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + word+" ";
                         break;
                 }
 
@@ -388,6 +449,9 @@ function enterNoise() {
                         case "CRC":
                             document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + words[i];
                             break;
+                        case "All":
+                            document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i];
+                            break;
                     }
                 }else{
 
@@ -400,6 +464,9 @@ function enterNoise() {
                             break;
                         case "CRC":
                             document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + words[i]+" ";
+                            break;
+                        case "All":
+                            document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i]+" ";
                             break;
                     }
                 }
@@ -493,6 +560,9 @@ function enterNoise() {
                     case "CRC":
                         document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + words[i];
                         break;
+                    case "All":
+                        document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i];
+                        break;
                 }
             }else{
 
@@ -506,9 +576,53 @@ function enterNoise() {
                     case "CRC":
                         document.getElementById("outputconvertCRC").value = document.getElementById("outputconvertCRC").value + words[i]+" ";
                         break;
+                    case "All":
+                        document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i]+" ";
+                        break;
                 }
             }
         }
     }
 
+}
+
+
+//Do ogólnego obliczenia
+function CodeAll(){
+
+//OBLICZANIE SUMY KONTROLNEJ
+    onCRCTypeChange();
+
+    var  massage;
+    type = document.getElementById('typeOfInputAll').value
+
+    document.getElementById('outputconvertAll').value="";
+
+    if (type==="Liczba binarna") {
+        massage = parseInt(document.getElementById('thing2convertAll').value, 2).toString();
+    }else{
+        massage = document.getElementById('thing2convertAll').value;
+    }
+
+    //alert(massage);
+
+    generate(); //generowanie tabeli
+
+    firstCode =Array.from( massage).map((each)=>each.charCodeAt(0).toString(2)).join(" "); //z string na bin ze spacjami
+
+    document.getElementById('binpacketAll').innerText=firstCode;
+
+    var massageToSend = codingCrc(massage);
+
+    alert(massageToSend);
+
+    document.getElementById('crcOutput').innerHTML = massageToSend;
+
+    //OBLICZANIE SUMY KONTROLNEJ
+
+    //OBLICZANIE HAMMINGA
+
+    alert("Hamming");
+    Hamming(); //wyslanie ciagu binarnego z CRC
+    //OBLICZANIE HAMMINGA
 }

@@ -78,6 +78,7 @@ function convertToString(text, bits) {
 }
 
 
+
 function crc()
 {
 
@@ -109,11 +110,20 @@ function crc()
 
    // verify(massageToSend);
 
+
+    //Po wszystkim sprawdź dane..
+    verifyCRC();
 }
 
-
 function onCRCTypeChange(){
-    typeOfCRC = document.getElementById('typeOfCRC').value;
+
+    if(typeOfCoding==="All"){
+        typeOfCRC = document.getElementById('typeOfCRCAll').value;
+    }else{
+        typeOfCRC = document.getElementById('typeOfCRC').value;
+    }
+
+    //alert(typeOfCRC);
 
         switch (typeOfCRC) {
             case "CRC 12":
@@ -233,19 +243,38 @@ function codingCrc(massage) {
 
 function verifyCRC() {
 
-    var massageToSend = document.getElementById('outputconvertCRC').value;
+    var checkoutputCRCId;
+    var massageToSend;
+    alert(typeOfCoding)
 
+    if(typeOfCoding==="All"){
+        checkoutputCRCId = "checkoutputCRCAll";
+        massageToSend = document.getElementById('removeHammingOutput').innerHTML;
+    }else{
+        checkoutputCRCId = "checkoutputCRC";
+        massageToSend = document.getElementById('outputconvertCRC').value;
+    }
 
+    alert("massageToSend "+massageToSend);
+    alert(checkoutputCRCId);
 
     //poprzez ponowne obliczenie sumy kontrolnej możliwe jest sprawdzenie poprawności przesłanych danych.
 
     // alert(massageToSend);
 
 
-    var massage = massageToSend.split(' '); //rozdzielenie pobranego tekstu na osobne wyrazy.
 
+    var massage = massageToSend.split(' '); //rozdzielenie pobranego tekstu na osobne wyrazy.
+    alert("massage "+massage);
     var checkMessage="";
+
+    if(massage[massage.length-1]===""){
+        massage.pop(); //usunięcie ostatniego elementu talbicy
+    }
+
+    alert("massage[massage.length-1] "+massage[massage.length-1]);
     var crcCode=massage[massage.length-1];
+    alert("crcCode"+crcCode);
     var i;
 
     for( i=0;i<massage.length;i++){
@@ -288,21 +317,21 @@ function verifyCRC() {
         checkSumString = checkSum.toString(2);
     }
 
-    // alert("crc32 "+parseInt(crc32.toString(2), 2));
-    // alert("crcCode " +   parseInt(crcCode, 2));
+       alert("checkSum "+parseInt(checkSum.toString(2), 2));
+       alert("crcCode " +   parseInt(crcCode, 2));
 
     var correct=false;
     if(parseInt(checkSum.toString(2), 2)===parseInt(crcCode, 2)){
         correct=true;
-        document.getElementById('checkoutputCRC').innerHTML="";
-        document.getElementById('checkoutputCRC').innerHTML=massageToSend;
+        document.getElementById(checkoutputCRCId).innerHTML="";
+        document.getElementById(checkoutputCRCId).innerHTML=massageToSend;
     }else{
         massage[massage.length-1]=checkSum.toString(2);
-        document.getElementById('checkoutputCRC').innerHTML="";
+        document.getElementById(checkoutputCRCId).innerHTML="";
         for(i=0;i<massage.length-1;i++){
-            document.getElementById('checkoutputCRC').innerHTML+=massage[i]+" ";
+            document.getElementById(checkoutputCRCId).innerHTML+=massage[i]+" ";
         }
-        document.getElementById('checkoutputCRC').innerHTML+='<span class="text-danger"> '+checkSumString+"</span>";
+        document.getElementById(checkoutputCRCId).innerHTML+='<span class="text-danger"> '+checkSumString+"</span>";
     }
 
     //alert(parseInt(checkSum.toString(2), 2));
@@ -315,9 +344,8 @@ function verifyCRC() {
     //alert(codingCrc(checkMessage));
 
     //decode
+    if(typeOfCoding!=="All") //jezeli to po prostu CRC
     decodeCRC(massageToSend);
-
-
 
     return correct;
 }
