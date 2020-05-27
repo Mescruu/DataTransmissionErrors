@@ -40,7 +40,7 @@ h1, h2, h3{
     overflow-y: auto;
 }
 .card-body-compare{
-    max-height: 70vh !important;
+    max-height: 100vh !important;
     overflow-y: auto;
 }
 .modal-dialog{

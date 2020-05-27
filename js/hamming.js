@@ -4,24 +4,35 @@ var type="";
 
 
 function Hamming() {
-    document.getElementById("binpacket").innerText = '';
-    document.getElementById("outputconvert").value='';
-
-    type = document.getElementById('typeOfInputHamming').value
 
     var bin;
+    var thing2ConvertId ="";
+
+    if (typeOfCoding==="All"){
+        type = "All";
+        thing2ConvertId = "crcOutput";
+    }else{
+        document.getElementById("binpacket").innerText = '';
+        document.getElementById("outputconvert").value='';
+
+        type = document.getElementById('typeOfInputHamming').value
+        thing2ConvertId = "thing2convertHamming";
+    }
+
+alert(type);
+    alert(thing2ConvertId);
 
     switch (type) {
         case "Tekst":
-            bin = document.getElementById('thing2convertHamming').value; //zmienna do zakodowania
+            bin = document.getElementById(thing2ConvertId).value; //zmienna do zakodowania
             codeHammingFromText(bin);
-
 
             break;
         case "Liczba decymalna":
-            bin = parseInt(document.getElementById('thing2convertHamming').value); //zmienna do zakodowania
+            bin = parseInt(document.getElementById(thing2ConvertId).value); //zmienna do zakodowania
             bin = bin.toString(2);
 
+            if (typeOfCoding!=="All")  //jezeli to zwykly Hamming
             document.getElementById("binpacket").innerText=bin;
 
             codeHamming(bin);
@@ -29,11 +40,24 @@ function Hamming() {
             break;
 
         case "Liczba binarna":
-            bin = document.getElementById('thing2convertHamming').value; //zmienna do zakodowania
+            bin = document.getElementById(thing2ConvertId).value; //zmienna do zakodowania
 
+            if (typeOfCoding!=="All")  //jezeli to zwykly Hamming
             document.getElementById("binpacket").innerText=bin;
 
             codeHamming(bin);
+            break;
+        case "All":   //jezeli kodowana jest całość (razem z CRC)
+
+            bin = document.getElementById(thing2ConvertId).innerText; //zmienna do zakodowania
+            var words = bin.split(" ");
+
+
+            for(var i = 0; i<words.length;i++){
+               // alert(words[i]);
+                codeHamming(words[i]); //wysyłanie poszczególnych ciągów binarnych
+            }
+
             break;
         default:
     }
@@ -43,6 +67,8 @@ function Hamming() {
 function codeHamming(bin) {
 
         var  parrityBits =  0;
+
+        alert(bin.length);
 
         if (bin.length <=4) {
 
@@ -65,13 +91,28 @@ function codeHamming(bin) {
                     var controlTable= "1000000010001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
                 }
                 else{
-    throw new Error("Została wprowadzona za duża liczba!");
+                    if(bin.length<=57)   //https://en.wikipedia.org/wiki/Hamming_code na podstawie tabeli general Algorithm
+                    {
+                        parrityBits = 6;
+                        var controlTable= "10000000000000001000000010001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
+                    }else{
+                        throw new Error("Została wprowadzona za duża liczba!");
+                    }
                 }
             }
         }
 
-hamming(parrityBits, controlTable, bin);
-firstCode = document.getElementById("outputconvert").value;
+    hamming(parrityBits, controlTable, bin);
+
+        if(typeOfCoding!=="All"){
+            firstCode = document.getElementById("outputconvert").value;
+        }else{
+            firstCode = document.getElementById("outputconvertAll").value;
+        }
+
+
+    //Po wszystkim sprawdź dane..
+    checkCode();
 
 }
 
@@ -82,10 +123,12 @@ function codeHammingFromText(str) {
 
     for (i = 0; i < str.length; i++) {
         strAsciiArray[i]=str.charCodeAt(i);
-        codeHamming(strAsciiArray[i].toString(2));
+        codeHamming(strAsciiArray[i].toString(2));  //kodowanie hamminga na poszczególnych literach
         outputBin= outputBin + " " + strAsciiArray[i].toString(2);
     }
-    document.getElementById("binpacket").innerText=outputBin;
+
+    if (typeOfCoding!=="All")  //jezeli to zwykly Hamming
+        document.getElementById("binpacket").innerText=outputBin;
 
 }
 function IsPowerOfTwo(x)
@@ -95,7 +138,7 @@ function IsPowerOfTwo(x)
 
 function hamming(parrityBits,controlTable, text) {
 
-
+    if (typeOfCoding!=="All")  //jezeli to zwykly Hamming
     document.getElementById("title").innerText="Słowo po kodowaniu hamminga";
 
     var i;
@@ -142,21 +185,42 @@ function hamming(parrityBits,controlTable, text) {
     }
 
     // document.write(string = code.join(""));
-    var outputText =  document.getElementById("outputconvert").value;
 
-    if(outputText===""){
-        document.getElementById("outputconvert").value=code.join("");
+    if (typeOfCoding!=="All")  //jezeli to zwykly Hamming
+    {
+        var outputText =  document.getElementById("outputconvert").value;
+
+        if(outputText===""){
+            document.getElementById("outputconvert").value=code.join("");
+        }else{
+            document.getElementById("outputconvert").value=outputText+" "+ code.join("");
+        }
     }else{
-        document.getElementById("outputconvert").value=outputText+" "+ code.join("");
-    }
+        var outputText =  document.getElementById("outputconvertAll").value;
 
+        if(outputText===""){
+            document.getElementById("outputconvertAll").value=code.join("");
+        }else{
+            document.getElementById("outputconvertAll").value=outputText+" "+ code.join("");
+        }
+    }
 
 }
 
 function checkCode() {
 
-    var str =  document.getElementById("outputconvert").value;
-    document.getElementById("checkoutput").innerHTML ="";
+    var str;
+    var checkoutputId;
+
+    if(typeOfCoding==="All"){
+        str =  document.getElementById("outputconvertAll").value;
+        checkoutputId= "checkoutputHammingAll";
+    }else{
+        str =  document.getElementById("outputconvert").value;
+        checkoutputId= "checkoutput";
+    }
+
+    document.getElementById(checkoutputId).innerHTML ="";
     document.getElementById("repairoutput").innerHTML ="";
 
     var outputText;
@@ -172,27 +236,27 @@ function checkCode() {
             word =  Array.from(words[i]);
             var j = 0;
 
-            document.getElementById("checkoutput").innerHTML =document.getElementById("checkoutput").innerHTML + " ";
-            document.getElementById("repairoutput").innerHTML =document.getElementById("repairoutput").innerHTML + " ";
+            document.getElementById(checkoutputId).innerHTML +=" ";
+            document.getElementById("repairoutput").innerHTML +=" ";
 
             for(j=0; j<word.length;j++){
                 if(j===(word.length - checksum)){
-                    document.getElementById("checkoutput").innerHTML = document.getElementById("checkoutput").innerHTML +"<b>"+ word[j]+"</b>";
+                    document.getElementById(checkoutputId).innerHTML += "<b>"+ word[j]+"</b>";
 
                     var repairWord = repairCode(word[j]);
-                    document.getElementById("repairoutput").innerHTML = document.getElementById("repairoutput").innerHTML +"<u>"+ repairWord +"</u>";
+                    document.getElementById("repairoutput").innerHTML +="<u>"+ repairWord +"</u>";
 
                 }else{
-                    document.getElementById("checkoutput").innerHTML = document.getElementById("checkoutput").innerHTML +word[j];
-                    document.getElementById("repairoutput").innerHTML = document.getElementById("repairoutput").innerHTML +word[j];
+                    document.getElementById(checkoutputId).innerHTML += word[j];
+                    document.getElementById("repairoutput").innerHTML += word[j];
                 }
             }
-                document.getElementById("checkoutput").innerHTML =document.getElementById("checkoutput").innerHTML + " ";
-                document.getElementById("repairoutput").innerHTML =document.getElementById("repairoutput").innerHTML + " ";
+                document.getElementById(checkoutputId).innerHTML += " ";
+                document.getElementById("repairoutput").innerHTML +=  " ";
         }
         else{
-            document.getElementById("checkoutput").innerHTML = document.getElementById("checkoutput").innerHTML+" "+ words[i];
-            document.getElementById("repairoutput").innerHTML = document.getElementById("repairoutput").innerHTML+" "+ words[i];
+            document.getElementById(checkoutputId).innerHTML += " "+ words[i];
+            document.getElementById("repairoutput").innerHTML += " "+ words[i];
         }
     }
 
@@ -232,6 +296,10 @@ function checkWord(word) {
 
 function decodeHamming(str) {
 
+    //przypadek gdzie jest także crc
+    if(typeOfCoding==="All"){
+        type="All";
+    }
     document.getElementById("decodeOutput").innerText="";
 
     if(str[0]===' '){
@@ -246,36 +314,15 @@ function decodeHamming(str) {
 
     var words = str.split(' '); //rozdzielenie pobranego tekstu na osobne wyrazy.
 
-
-    if (words[0].length <=4) {
-
-        controlPos = [1,2,4];
-
-    }
-    else
-    {
-        if(words[0].length<=11)   //https://en.wikipedia.org/wiki/Hamming_code na podstawie tabeli general Algorithm
-        {
-            controlPos = [1,2,4,8];
-        }
-        else
-        {
-            if(words[0].length<=26)   //https://en.wikipedia.org/wiki/Hamming_code na podstawie tabeli general Algorithm
-            {
-                controlPos = [1,2,4,8,16];
-            }
-            else{
-                throw new Error("Błąd przy dekodowaniu");
-            }
-        }
-    }
+    controlPos = [1,2,4,8,16,32];
 
     var i;
     var j;
     var word;
     var decodeWord="";
     var decodeWords="";
-
+    var decodeText="";
+    var textWithoutHamming="";
 
     for(i=0;i<words.length;i++){
         word = words[i];
@@ -283,10 +330,13 @@ function decodeHamming(str) {
         decodeWord="";
 
         for(j=0;j<word.length;j++){
-            if((word.length-j)!==controlPos[0] && (word.length-j)!==controlPos[1] && (word.length-j)!==controlPos[2] && (word.length-j)!==controlPos[3] && (word.length-j)!==controlPos[4]){ //sprawdzenie czy litera nie jest na pozycji bitu kontrolnego.
+            if((word.length-j)!==controlPos[0] && (word.length-j)!==controlPos[1] && (word.length-j)!==controlPos[2] && (word.length-j)!==controlPos[3] && (word.length-j)!==controlPos[4] && (word.length-j)!==controlPos[5]){ //sprawdzenie czy litera nie jest na pozycji bitu kontrolnego.
+
                 decodeWord+=word[j];
             }
         }
+        textWithoutHamming+=decodeWord+" ";
+
         switch (type) {
             case "Tekst":
                 decodeWords =  String.fromCharCode(parseInt(decodeWord, 2));
@@ -297,19 +347,45 @@ function decodeHamming(str) {
             case "Liczba binarna":
                 decodeWords =  Number(decodeWord).toString();  //usunięcie niepotrzebnych zer od lewej strony.
                 break;
+            case "All":
+
+                if(i!==words.length-1){ //jezeli to nie jest ostatnie słowo, ponieważ na końcu jest CRC
+                    decodeWords =  String.fromCharCode(parseInt(decodeWord, 2));
+                }else {
+                    break; //przerwij pętle
+                }
+                break;
+
             default:
         }
 
-        document.getElementById("decodeOutput").innerHTML  = document.getElementById("decodeOutput").innerHTML +decodeWords;
+        decodeText  += decodeWords;
+    }
+    if(typeOfCoding==="All"){
+        document.getElementById("removeHammingOutput").innerText = textWithoutHamming;
     }
 
+    alert(textWithoutHamming);
+
+    if(typeOfCoding==="All"){
+        verifyCRC();
+    }
+
+    document.getElementById("decodeOutput").innerHTML = decodeText;
 }
 
 function checkDifference() {
 
+    var strF;
+    var strR;
+    strR = document.getElementById("repairoutput").innerText;
 
-    var strF = document.getElementById("outputconvert").value;
-    var strR = document.getElementById("repairoutput").innerText;
+    if(typeOfCoding!=="All"){ //zwykły hamming
+        strF=  document.getElementById("outputconvert").value;
+    }else{ //complete Coding
+        strF=  document.getElementById("outputconvertAll").value;
+    }
+
 
     document.getElementById("differenceOutput1").innerHTML="";
     document.getElementById("differenceOutput").innerHTML="";
