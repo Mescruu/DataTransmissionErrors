@@ -359,7 +359,7 @@ function decodeHamming(str) {
             }
         }
 
-    alert("decodeWord "+decodeWord);
+    alert("decodeWord !!"+decodeWord);
 
         switch (type) {
             case "Tekst":
@@ -391,9 +391,9 @@ function decodeHamming(str) {
 
     if(typeOfCoding==="All"){
         verifyCRC();
+    }else{
+        document.getElementById("decodeOutput").innerHTML = decodeText;
     }
-
-    document.getElementById("decodeOutput").innerHTML = decodeText;
 }
 
 function checkDifference() {

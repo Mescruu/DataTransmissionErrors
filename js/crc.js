@@ -350,7 +350,6 @@ function verifyCRC() {
     //alert(codingCrc(checkMessage));
 
     //decode
-    if(typeOfCoding!=="All") //jezeli to po prostu CRC
     decodeCRC(massageToSend, correct);
 
     return correct;
@@ -359,8 +358,15 @@ function verifyCRC() {
 function decodeCRC(massage, correct) {
 
     var words = chunkSubstr(massage, 8).join("");//rozdzielenie pobranego tekstu na osobne wyrazy.
-    alert(words);
-    document.getElementById("recivedOutput").innerText =  words;
+    alert("słowo po dekodowaniu: "+ words);
+
+    alert(typeOfCoding);
+
+    if(typeOfCoding==="All"){
+        document.getElementById("decodeOutput").innerText =  words;
+    }else{
+        document.getElementById("recivedOutput").innerText =  words;
+    }
 
     checkCRCDifference(correct);
 }
