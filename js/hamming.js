@@ -73,14 +73,14 @@ function codeHamming(bin) {
         if (bin.length <=4) {
 
             parrityBits =  3;
-            var controlTable= "1011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
+           // var controlTable= "1011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
         }
         else
         {
             if(bin.length<=11)   //https://en.wikipedia.org/wiki/Hamming_code na podstawie tabeli general Algorithm
             {
                 parrityBits =  4;
-                var controlTable= "10001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
+               // var controlTable= "10001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
 
             }
             else
@@ -88,21 +88,30 @@ function codeHamming(bin) {
                 if(bin.length<=26)   //https://en.wikipedia.org/wiki/Hamming_code na podstawie tabeli general Algorithm
                 {
                     parrityBits =  5;
-                    var controlTable= "1000000010001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
+                  //  var controlTable= "1000000010001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
                 }
                 else{
                     if(bin.length<=57)   //https://en.wikipedia.org/wiki/Hamming_code na podstawie tabeli general Algorithm
                     {
                         parrityBits = 6;
-                        var controlTable= "10000000000000001000000010001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
+                      //  var controlTable= "10000000000000001000000010001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
                     }else{
-                        throw new Error("Została wprowadzona za duża liczba!");
-                    }
+                        if(bin.length<=120)   //https://en.wikipedia.org/wiki/Hamming_code na podstawie tabeli general Algorithm
+                        {
+                            parrityBits = 7;
+                        //    var controlTable= "1000000000000000000000000000000010000000000000001000000010001011"; //1 zaznaczają w których miejscach jest zmienna kontrolna
+                        }else{
+                            if(bin.length<=247)   //https://en.wikipedia.org/wiki/Hamming_code na podstawie tabeli general Algorithm
+                            {
+                                parrityBits = 8;
+                            }else{
+                                throw new Error("Została wprowadzona za duża liczba!");
+                            }                            }                    }
                 }
             }
         }
 
-    hamming(parrityBits, controlTable, bin);
+    hamming(parrityBits, bin);
 
         if(typeOfCoding!=="All"){
             firstCode = document.getElementById("outputconvert").value;
@@ -120,12 +129,22 @@ function codeHammingFromText(str) {
     var i =0;
     var strAsciiArray=[];
     var outputBin = document.getElementById("binpacket").innerText;
+    var binText="";
 
     for (i = 0; i < str.length; i++) {
         strAsciiArray[i]=str.charCodeAt(i);
-        codeHamming(strAsciiArray[i].toString(2));  //kodowanie hamminga na poszczególnych literach
+       // alert( strAsciiArray[i]);
+        var decToBin = strAsciiArray[i].toString(2);
+        //alert(decToBin);
+
+        binText+= "0".repeat(8-decToBin.length);
+        binText+= decToBin;
+
+       // alert( binText[i]);
         outputBin= outputBin + " " + strAsciiArray[i].toString(2);
     }
+
+    codeHamming(binText);  //kodowanie hamminga na poszczególnych literach
 
     if (typeOfCoding!=="All")  //jezeli to zwykly Hamming
         document.getElementById("binpacket").innerText=outputBin;
@@ -136,7 +155,7 @@ function IsPowerOfTwo(x)
     return (x != 0) && ((x & (x - 1)) == 0);
 }
 
-function hamming(parrityBits,controlTable, text) {
+function hamming(parrityBits, text) {
 
     if (typeOfCoding!=="All")  //jezeli to zwykly Hamming
     document.getElementById("title").innerText="Słowo po kodowaniu hamminga";
@@ -315,7 +334,9 @@ function decodeHamming(str) {
 
     var words = str.split(' '); //rozdzielenie pobranego tekstu na osobne wyrazy.
 
-    controlPos = [1,2,4,8,16,32];
+    controlPos = [1,2,4,8,16,32,64,128];
+
+    alert("words "+words);
 
     var i;
     var j;
@@ -323,24 +344,27 @@ function decodeHamming(str) {
     var decodeWord="";
     var decodeWords="";
     var decodeText="";
-    var textWithoutHamming="";
 
-    for(i=0;i<words.length;i++){
+    for(i=0;i<words.length;i++){ //jedno słowo jest wiec i=0 tylko (DO POPRAWY)
         word = words[i];
 
         decodeWord="";
 
         for(j=0;j<word.length;j++){
-            if((word.length-j)!==controlPos[0] && (word.length-j)!==controlPos[1] && (word.length-j)!==controlPos[2] && (word.length-j)!==controlPos[3] && (word.length-j)!==controlPos[4] && (word.length-j)!==controlPos[5]){ //sprawdzenie czy litera nie jest na pozycji bitu kontrolnego.
+            if((word.length-j)!==controlPos[0] && (word.length-j)!==controlPos[1] && (word.length-j)!==controlPos[2] && (word.length-j)!==controlPos[3] && (word.length-j)!==controlPos[4] && (word.length-j)!==controlPos[5]&& (word.length-j)!==controlPos[6]&& (word.length-j)!==controlPos[7]){ //sprawdzenie czy litera nie jest na pozycji bitu kontrolnego.
+               // alert(word.length-j);
 
                 decodeWord+=word[j];
+               // alert(decodeWord);
             }
         }
-        textWithoutHamming+=decodeWord+" ";
+
+    alert("decodeWord "+decodeWord);
 
         switch (type) {
             case "Tekst":
-                decodeWords =  String.fromCharCode(parseInt(decodeWord, 2));
+                decodeWords = chunkSubstr(decodeWord,8).join("");
+               // alert(decodeWords);
                 break;
             case "Liczba decymalna":
                 decodeWords = parseInt(decodeWord, 2);
@@ -349,21 +373,18 @@ function decodeHamming(str) {
                 decodeWords =  Number(decodeWord).toString();  //usunięcie niepotrzebnych zer od lewej strony.
                 break;
             case "All":
-
                 if(i!==words.length-1){ //jezeli to nie jest ostatnie słowo, ponieważ na końcu jest CRC
                     decodeWords =  String.fromCharCode(parseInt(decodeWord, 2));
                 }else {
                     continue; //przerwij pętle
                 }
                 break;
-
             default:
         }
-
         decodeText  += decodeWords;
     }
     if(typeOfCoding==="All"){
-        document.getElementById("removeHammingOutput").innerText = textWithoutHamming;
+        document.getElementById("removeHammingOutput").innerText = decodeWord;
     }
 
    // alert(textWithoutHamming);
@@ -457,8 +478,8 @@ function checkDifference() {
         var checkoutputCRCAllText = document.getElementById("checkoutputCRCAll").innerHTML;
         var words = checkoutputCRCAllText.split(" ");
         var word = words[words.length-1];
-        alert(word);
-        if(word[word.length-1]===">"){
+       // alert(word);
+        if(word[word.length-10-bitCount]!=="s"){
             document.getElementById('crcWarningDiv').style.display="block"; //wyłączenie warninga przy porównaniu
             document.getElementById("crcWarning").innerHTML= '<b>Suma kontrolna jest niepoprawna! Dane mogą być uszkodzone</b>';
         }

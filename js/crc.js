@@ -98,9 +98,32 @@ function crc()
 
     generate(); //generowanie tabeli
 
-    firstCode =Array.from( massage).map((each)=>each.charCodeAt(0).toString(2)).join(" "); //z string na bin ze spacjami
+    alert(massage);
 
-    document.getElementById('binpacketCRC').innerText=firstCode;
+    var binText="";
+    var str="";
+
+//pobranie danych z pola "Wproawdz słowo" i przerobienie ich na ciąg bin
+    for (var i = 0; i < massage.length; i++) {
+
+        str=massage.charCodeAt(i);
+
+     //   alert(str);
+        var decToBin = str.toString(2); //z ASCII na bin
+
+       // alert("decToBin.length "+decToBin.length);
+
+        binText+= "0".repeat(8-decToBin.length); //Dodanie uciętych zer z przodu
+      //  alert("binText "+binText);
+
+        binText+= decToBin;
+        //alert("binText "+binText);
+    }
+
+
+    firstCode =binText; //z string na bin
+
+    document.getElementById('binpacketCRC').innerText=binText; //z string na bin
 
     var massageToSend = codingCrc(massage);
 
@@ -205,9 +228,9 @@ function onCRCTypeChange(){
 }
 
 function codingCrc(massage) {
+
     var i;
     var temp = 0x0;
-
 
     for(i = 0; i < massage.length; i++)
     {
@@ -228,8 +251,9 @@ function codingCrc(massage) {
 
 
     for(i=0;i<massage.length;i++){
-        mes +="0"+massage.charCodeAt(i).toString(2)+" ";
-        massageToSend+=massage.charCodeAt(i).toString(2)+" ";
+       // mes +="0"+massage.charCodeAt(i).toString(2);
+        massageToSend+="0".repeat(8-massage.charCodeAt(i).toString(2).length); //dodanie 0 na poczatku
+        massageToSend+=massage.charCodeAt(i).toString(2);
     }
 
     massageToSend+=convertToString(checkSum,bitCount);  //32 bo 32 bity są w  kluczu CRC
@@ -247,6 +271,7 @@ function verifyCRC() {
     var massageToSend;
     //alert(typeOfCoding)
 
+
     if(typeOfCoding==="All"){
         checkoutputCRCId = "checkoutputCRCAll";
         massageToSend = document.getElementById('removeHammingOutput').innerHTML;
@@ -254,6 +279,8 @@ function verifyCRC() {
         checkoutputCRCId = "checkoutputCRC";
         massageToSend = document.getElementById('outputconvertCRC').value;
     }
+
+    alert("massageToSend"+massageToSend);
 
     //alert("massageToSend "+massageToSend);
     //alert(checkoutputCRCId);
@@ -263,42 +290,26 @@ function verifyCRC() {
     // alert(massageToSend);
 
 
+    var crcCode = massageToSend.substr(massageToSend.length-bitCount,massageToSend.length); // wytnij ostatnie bity CRC
 
-    var massage = massageToSend.split(' '); //rozdzielenie pobranego tekstu na osobne wyrazy.
-    //alert("massage "+massage);
-    var checkMessage="";
+    alert(crcCode);
 
-    if(massage[massage.length-1]===""){
-        massage.pop(); //usunięcie ostatniego elementu talbicy
-    }
 
-   // alert("massage[massage.length-1] "+massage[massage.length-1]);
-    var crcCode=massage[massage.length-1];
-    //alert("crcCode"+crcCode);
+    massageToSend = massageToSend.substring(0, massageToSend.length-bitCount); //wytnij tekst
+
+    var massage = chunkSubstr(massageToSend, 8).join("");//rozdzielenie pobranego tekstu na osobne wyrazy.
+
     var i;
-
-    for( i=0;i<massage.length;i++){
-
-        if(i<massage.length-1){
-
-            checkMessage+=String.fromCharCode(parseInt(massage[i], 2));
-        }
-    }
-
-    //  alert("checkMessage "+checkMessage);
-    //  alert("crcCode "+crcCode);
-
-    // alert("crc chunks "+String.fromCharCode(chunkSubstr(crcCode, 8).join(""), 2));
-
-
 
     var temp = 0x0;
 
     onCRCTypeChange();
 
-    for(i = 0; i < checkMessage.length; i++)
+    alert(massage);
+
+    for(i = 0; i < massage.length; i++)
     {
-        temp = crc_tab[(checkSum & 0xff) ^ checkMessage.charCodeAt(i)];
+        temp = crc_tab[(checkSum & 0xff) ^ massage.charCodeAt(i)];
         tempWord = (checkSum>>>8); //musi być >>> bo nie działa przy >>
         checkSum = tempWord ^ temp ; //zmienna równa
     } //zmienna równa
@@ -309,29 +320,24 @@ function verifyCRC() {
     }
     var checkSumString;
 
-    //alert(checkSum.toString(2).length);
+    alert("checksum" +convertToString(checkSum,bitCount));
 
-    if(checkSum.toString(2).length!==bitCount){
-        checkSumString = "0".repeat(bitCount-checkSum.toString(2).length)+checkSum.toString(2);
-    }else{
-        checkSumString = checkSum.toString(2);
+    if(crcCode.length!==bitCount){ //dodanie 0 z przodu jeżeli zostały pominięte
+        crcCode = "0".repeat(bitCount-crcCode.length)+crcCode;
     }
 
-     //  alert("checkSum "+parseInt(checkSum.toString(2), 2));
-     //  alert("crcCode " +   parseInt(crcCode, 2));
+    alert("checksum" +convertToString(checkSum,bitCount));
+    alert("crcCode " +   crcCode);
 
     var correct=false;
-    if(parseInt(checkSum.toString(2), 2)===parseInt(crcCode, 2)){
+    if(crcCode===convertToString(checkSum,bitCount)){
+        alert("true");
         correct=true;
         document.getElementById(checkoutputCRCId).innerHTML="";
-        document.getElementById(checkoutputCRCId).innerHTML=massageToSend;
+        document.getElementById(checkoutputCRCId).innerHTML=massageToSend + '<span class="text-success">'+convertToString(checkSum,bitCount)+"</span>";
     }else{
-        massage[massage.length-1]=checkSum.toString(2);
         document.getElementById(checkoutputCRCId).innerHTML="";
-        for(i=0;i<massage.length-1;i++){
-            document.getElementById(checkoutputCRCId).innerHTML+=massage[i]+" ";
-        }
-        document.getElementById(checkoutputCRCId).innerHTML+='<span class="text-danger"> '+checkSumString+"</span>";
+        document.getElementById(checkoutputCRCId).innerHTML=massageToSend + '<span class="text-danger">'+crcCode+"</span>";
     }
 
     //alert(parseInt(checkSum.toString(2), 2));
@@ -345,124 +351,53 @@ function verifyCRC() {
 
     //decode
     if(typeOfCoding!=="All") //jezeli to po prostu CRC
-    decodeCRC(massageToSend);
+    decodeCRC(massageToSend, correct);
 
     return correct;
 }
 
-function decodeCRC(massage) {
+function decodeCRC(massage, correct) {
 
-    var words = massage.split(" ");
+    var words = chunkSubstr(massage, 8).join("");//rozdzielenie pobranego tekstu na osobne wyrazy.
+    alert(words);
+    document.getElementById("recivedOutput").innerText =  words;
 
-    var type = document.getElementById('typeOfInputCRC').value
-    var decodeWords="";
-
-    document.getElementById("recivedOutput").innerText="";
-
-    for(i=0;i<words.length-1;i++){
-        var word = words[i];
-
-        decodeWords =  String.fromCharCode(parseInt(word, 2));
-
-        document.getElementById("recivedOutput").innerText +=  decodeWords;
-    }
-
-    checkCRCDifference();
+    checkCRCDifference(correct);
 }
+
+
 
 
 //// nie potrzebne na razie
 
 
-function chunkSubstr(str, size) {  //zamiana ciągu bitów na słowa
+function checkCRCDifference(correct) {
 
-    var numChunks = str.length / 8;
+    alert(firstCode);
 
-    numChunks = Math.ceil(numChunks);
+    var strCheck = document.getElementById("checkoutputCRC").innerText;
+    var strInputWords = firstCode.split(" ");
 
-    const chunks = new Array(numChunks);
+    var strInput = strInputWords[0]+strInputWords[1];
 
-    for (let i = numChunks - 1, o = str.length - size; i >= 0; i--, o -= size) {
-
-        // alert("i = " + i);
-
-
-        chunks[i] = String.fromCharCode(parseInt(str.substr(o, str.length), 2)); //dodanie do tablicy części tekstu
-
-
-
-        //  alert("chunks["+i+"] " + chunks[i]);
-
-        str = str.substr(0, o); //uciecie zabranego konca
-
-        //  alert(str);
-            if(numChunks>1){
-                if(i===0 && chunks[0].length!==chunks[1].length){
-                    chunks[0] = '0'.repeat(8-chunks[0].length)+chunks[0]; //dopełnienie zerami z przodu.
-                }
-            }else{
-                if(i===0 && chunks[0].length!==size){
-                    chunks[0] = '0'.repeat(8-chunks[0].length)+chunks[0]; //dopełnienie zerami z przodu.
-                }
-            }
-    }
-   // alert(document.getElementById("thing2convertCRC").value);
-
-    //alert(chunks);
-    return chunks
-}
-
-function checkCRCDifference() {
-
-    var strF = document.getElementById("checkoutputCRC").innerText;
+    alert(strInput);
 
     document.getElementById("differenceOutput1").innerHTML="";
     document.getElementById("differenceOutput").innerHTML="";
     document.getElementById("differenceOutput2").innerHTML="Brak możliwości";
 
-    if(strF[0]===' '){
-        strF = strF.substring(1, strF.length);
-    }
-    if(strF[strF.length-1]===' '){
-        strF = strF.substring(0, strF.length-1);
-    }
 
-    var strFirst =  strF.split(' ');
-    //alert("first code: "+ firstCode);
+    var numberOfErrors=0;
 
-    var strGlobal =  firstCode.split(' ');
-
-    var checkoutputCRCText = document.getElementById("checkoutputCRC").innerHTML;
-    var checkoutputCRCTextSplit =  checkoutputCRCText.split(' ');
-
-   // alert(checkoutputCRCTextSplit);
-    var i =0;
-
-    var mistakeCounter=0;
-    var detectedMistakeCounter=0;
-
-
-    for(i=0;i<strFirst.length;i++){
-
-        var checkoutputCRCWord = checkoutputCRCTextSplit[i]; //
-        if(checkoutputCRCWord[1]==="s"){  //jezeli jest span, wtedy oznacza, że jest źle
-
-            if(i===strFirst.length-1){
-                detectedMistakeCounter+=bitCount; //tylko wiadomo, że suma kontrolna się popsuła
-            }
-        }
-
-        document.getElementById("differenceOutput").innerHTML=document.getElementById("differenceOutput").innerHTML+" ";
-        document.getElementById("differenceOutput1").innerHTML=document.getElementById("differenceOutput1").innerHTML+" ";
-
-        if(strGlobal[i]!==strFirst[i])
+    for(var i=0;i<strCheck.length;i++){
+        if(strCheck[i]!==strInput[i])
         {
-            mistakeCounter+=8;
-            document.getElementById("differenceOutput").innerHTML+='<d>'+strGlobal[i]+"</d>";
-            document.getElementById("differenceOutput1").innerHTML+='<span class="text-danger">'+strFirst[i]+"</span>";
+            numberOfErrors++;
+            document.getElementById("differenceOutput").innerHTML+='<b>'+strCheck[i]+"</b>";
+            document.getElementById("differenceOutput1").innerHTML+='<span class="text-danger">'+strInput[i]+"</span>";
         }else{
-            document.getElementById("differenceOutput").innerHTML+=strGlobal[i];
-            document.getElementById("differenceOutput1").innerHTML+=strFirst[i];
+            document.getElementById("differenceOutput").innerHTML+=strCheck[i];
+            document.getElementById("differenceOutput1").innerHTML+=strInput[i];
         }
     }
 
@@ -471,9 +406,15 @@ function checkCRCDifference() {
 
     document.getElementById("output").innerText= document.getElementById("recivedOutput").innerText;
 
-    document.getElementById("compatibility").innerText=(100-((mistakeCounter)*100)/(strFirst[0].length*strFirst.length));
-    document.getElementById("numberOfErrors").innerText=mistakeCounter;
-    document.getElementById("numberOfDetect").innerText=detectedMistakeCounter;
+    document.getElementById("compatibility").innerText=(100-((numberOfErrors)*100)/(strCheck.length));
+    if(numberOfErrors>0){
+        document.getElementById("numberOfErrors").innerText="niezgodność sum kontrolnych. Dane mogą być zakłócone";
+        document.getElementById("numberOfDetect").innerText="Cały blok może być błędny";
+    }else{
+        document.getElementById("numberOfErrors").innerText="Sumy kontrolne zgadzają się.";
+        document.getElementById("numberOfDetect").innerText="Nie wykryto błędów";
+    }
+
     document.getElementById("numberOfRepaired").innerText="brak";
 }
 

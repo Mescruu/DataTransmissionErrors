@@ -683,7 +683,6 @@ function CodeAll(){
 
     document.getElementById('crcWarningDiv').style.display = 'none'; //wyłączenie warninga przy porównaniu
 
-
     var  massage;
     type = document.getElementById('typeOfInputAll').value
 
@@ -699,7 +698,30 @@ function CodeAll(){
 
     generate(); //generowanie tabeli
 
-    firstCode =Array.from( massage).map((each)=>each.charCodeAt(0).toString(2)).join(" "); //z string na bin ze spacjami
+    alert(massage);
+
+    var binText="";
+    var str="";
+
+//pobranie danych z pola "Wproawdz słowo" i przerobienie ich na ciąg bin
+    for (var i = 0; i < massage.length; i++) {
+
+        str=massage.charCodeAt(i);
+
+        //   alert(str);
+        var decToBin = str.toString(2); //z ASCII na bin
+
+        // alert("decToBin.length "+decToBin.length);
+
+        binText+= "0".repeat(8-decToBin.length); //Dodanie uciętych zer z przodu
+        //  alert("binText "+binText);
+
+        binText+= decToBin;
+        //alert("binText "+binText);
+    }
+
+
+    firstCode =binText; //z string na bin
 
     document.getElementById('binpacketAll').innerText=firstCode;
 
@@ -717,3 +739,43 @@ function CodeAll(){
     Hamming(); //wyslanie ciagu binarnego z CRC
     //OBLICZANIE HAMMINGA
 }
+
+
+function chunkSubstr(str, size) {  //zamiana ciągu bitów na słowa
+
+    var numChunks = str.length / size;
+
+    numChunks = Math.ceil(numChunks);
+
+    const chunks = new Array(numChunks);
+
+    for (let i = numChunks - 1, o = str.length - size; i >= 0; i--, o -= size) {
+
+        // alert("i = " + i);
+
+
+        chunks[i] = String.fromCharCode(parseInt(str.substr(o, str.length), 2)); //dodanie do tablicy części tekstu
+
+
+
+        //  alert("chunks["+i+"] " + chunks[i]);
+
+        str = str.substr(0, o); //uciecie zabranego konca
+
+        //  alert(str);
+        if(numChunks>1){
+            if(i===0 && chunks[0].length!==chunks[1].length){
+                chunks[0] = '0'.repeat(8-chunks[0].length)+chunks[0]; //dopełnienie zerami z przodu.
+            }
+        }else{
+            if(i===0 && chunks[0].length!==size){
+                chunks[0] = '0'.repeat(8-chunks[0].length)+chunks[0]; //dopełnienie zerami z przodu.
+            }
+        }
+    }
+    // alert(document.getElementById("thing2convertCRC").value);
+
+    //alert(chunks);
+    return chunks
+}
+

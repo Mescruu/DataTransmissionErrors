@@ -78,13 +78,15 @@ function codeParrityFromText(str) {
     var outputBin = document.getElementById("binpacketParrity").innerText;
 
     for (i = 0; i < str.length; i++) {
-        strAsciiArray[i]="0000000"; //Zmienne ASCI posiadają 7 bitów
-        strAsciiArray[i] = strAsciiArray[i].substring(0, 7 - (str.charCodeAt(i)).toString(2).length); //uciecie koncowki pustego textu i dodanie na koniec binarnej wartosci z bin.
+        strAsciiArray[i]="00000000"; //Zmienne ASCI posiadają 8 bitów
+        strAsciiArray[i] = strAsciiArray[i].substring(0, 8 - (str.charCodeAt(i)).toString(2).length); //uciecie koncowki pustego textu i dodanie na koniec binarnej wartosci z bin.
         strAsciiArray[i]= strAsciiArray[i]+(str.charCodeAt(i)).toString(2);
-        codeParrity(strAsciiArray[i]);
+
 
         outputBin= outputBin + " " + strAsciiArray[i].toString(2);
     }
+    codeParrity(strAsciiArray.join(""));
+
     document.getElementById("binpacketParrity").innerText=outputBin;
 
     var text = document.getElementById("outputconvertParrity").value;
@@ -159,7 +161,9 @@ function decodeParrity(words) {
 
         switch (type) {
             case "Tekst":
-                decodeWords =  String.fromCharCode(parseInt(decodeWord, 2));
+                 decodeWords = chunkSubstr(decodeWord,8);
+                alert(decodeWords);
+
                 break;
             case "Liczba decymalna":
                 decodeWords = parseInt(decodeWord, 2);
@@ -170,7 +174,7 @@ function decodeParrity(words) {
             default:
         }
 
-        document.getElementById("recivedOutput").innerHTML  = document.getElementById("recivedOutput").innerHTML +decodeWords;
+        document.getElementById("recivedOutput").innerHTML  += decodeWords.join("");
     }
 
 }
@@ -178,24 +182,16 @@ function decodeParrity(words) {
 function checkParrityDifference() {
 
 
-    var strF = document.getElementById("checkoutputParrity").innerText;
+    var strFirst = document.getElementById("checkoutputParrity").innerText;
 
     document.getElementById("differenceOutput1").innerHTML="";
     document.getElementById("differenceOutput").innerHTML="";
     document.getElementById("differenceOutput2").innerHTML="Brak możliwości";
 
-    if(strF[0]===' '){
-        strF = strF.substring(1, strF.length);
-    }
-    if(strF[strF.length-1]===' '){
-        strF = strF.substring(0, strF.length-1);
-    }
 
-    var strFirst =  strF.split(' ');
-    var strGlobal =  firstCode.split(' ');
+    var strGlobal =  firstCode;
 
     var checkoutputParrityText = document.getElementById("checkoutputParrity").innerHTML;
-    var checkoutputParrityTextSplit =  checkoutputParrityText.split(' ');
 
     var i =0;
 
@@ -205,19 +201,14 @@ function checkParrityDifference() {
 
     for(i=0;i<strFirst.length;i++){
 
-        var checkoutputParrityWord = checkoutputParrityTextSplit[i]; //
-        if(checkoutputParrityWord[1]==="b"){  //jezeli jest wytluszczone slowo, wtedy oznacza, że zostało wykryte
+        if(checkoutputParrityText[1]==="b"){  //jezeli jest wytluszczone slowo, wtedy oznacza, że zostało wykryte
             detectedMistakeCounter+=strGlobal[i].length;
         }
-
-            document.getElementById("differenceOutput").innerHTML=document.getElementById("differenceOutput").innerHTML+" ";
-            document.getElementById("differenceOutput1").innerHTML=document.getElementById("differenceOutput1").innerHTML+" ";
-
         if(strGlobal[i]!==strFirst[i])
         {
-            mistakeCounter+=strGlobal[i].length;
-            document.getElementById("differenceOutput").innerHTML+='<d>'+strGlobal[i]+"</d>";
-            document.getElementById("differenceOutput1").innerHTML+='<span class="text-danger">'+strFirst[i]+"</span>";
+            mistakeCounter++;
+            document.getElementById("differenceOutput").innerHTML+='<b>'+strGlobal[i]+"</b>";
+            document.getElementById("differenceOutput1").innerHTML+='<span class="text-danger"><b>'+strFirst[i]+"</b></span>";
         }else{
             document.getElementById("differenceOutput").innerHTML+=strGlobal[i];
             document.getElementById("differenceOutput1").innerHTML+=strFirst[i];
@@ -229,6 +220,12 @@ function checkParrityDifference() {
 
     document.getElementById("compatibility").innerText=(100-((mistakeCounter)*100)/(strFirst[0].length*strFirst.length));
     document.getElementById("numberOfErrors").innerText=mistakeCounter;
-    document.getElementById("numberOfDetect").innerText=detectedMistakeCounter;
+
+    if(detectedMistakeCounter>0){
+        document.getElementById("numberOfDetect").innerText="Wykryty bład w bloku!";
+    }else{
+        document.getElementById("numberOfDetect").innerText="Brak wykrytych błędów.";
+
+    }
     document.getElementById("numberOfRepaired").innerText="brak";
 }
