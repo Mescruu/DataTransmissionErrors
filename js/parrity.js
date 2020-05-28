@@ -162,7 +162,7 @@ function decodeParrity(words) {
         switch (type) {
             case "Tekst":
                  decodeWords = chunkSubstr(decodeWord,8);
-                alert(decodeWords);
+               // alert(decodeWords);
 
                 break;
             case "Liczba decymalna":

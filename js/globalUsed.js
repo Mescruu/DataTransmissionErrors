@@ -617,7 +617,7 @@ function enterNoise() {
     }
     if(document.getElementById("typeOfNoise").value==="Bit w bloku danych oraz bit w sumie kontrolnej (scenariusz 3)")
     {
-        alert("Bit w bloku danych oraz bit w sumie kontrolnej (scenariusz 3)");
+        //alert("Bit w bloku danych oraz bit w sumie kontrolnej (scenariusz 3)");
 
         var word = words[0];
         var wordOut="";
@@ -625,7 +625,7 @@ function enterNoise() {
         var pos = Math.floor(Math.random() * (+(word.length-bitCount) - +0)) + +0;//który z bitów (oprócz ostatnich bitów kontrolnych
         var pos2 = Math.floor(Math.random() * (+(word.length)-(word.length-bitCount)) + +word.length-bitCount);//który z bitów w crc
 
-        alert("pos: "+ pos+"   pos2: "+pos2);
+       // alert("pos: "+ pos+"   pos2: "+pos2);
 
         var random = Math.floor(Math.random() * (+max - +min)) + +min;  //losowa szansa na wygenerowanie szumu
 
@@ -683,7 +683,7 @@ function CodeAll(){
 
     generate(); //generowanie tabeli
 
-    alert(massage);
+    //alert(massage);
 
     var binText="";
     var str="";

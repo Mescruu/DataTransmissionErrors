@@ -336,7 +336,7 @@ function decodeHamming(str) {
 
     controlPos = [1,2,4,8,16,32,64,128];
 
-    alert("words "+words);
+    //alert("words "+words);
 
     var i;
     var j;
@@ -359,7 +359,7 @@ function decodeHamming(str) {
             }
         }
 
-    alert("decodeWord !!"+decodeWord);
+    //alert("decodeWord !!"+decodeWord);
 
         switch (type) {
             case "Tekst":
