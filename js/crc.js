@@ -73,7 +73,11 @@ function generate()
 
 function convertToString(text, bits) {
     var returnText;
-     returnText='0'.repeat(bits).substring(0, bits - text.toString(2).length) + text.toString(2);
+    var template = text.toString(2);
+    if(template[0]==="-"){
+        template=template.substr(1);
+    }
+     returnText='0'.repeat(bits).substring(0, bits - template.length) + template;
     return returnText;
 }
 
@@ -98,7 +102,7 @@ function crc()
 
     generate(); //generowanie tabeli
 
-    alert(massage);
+    //alert(massage);
 
     var binText="";
     var str="";
@@ -243,6 +247,9 @@ function codingCrc(massage) {
     if(reversWord!==0){
         checkSum =checkSum ^ reversWord;  //odwrocenie na koncu
     }
+    //alert(checkSum);
+
+    //alert(convertToString(checkSum,bitCount));
 
     //alert("CRC: " + ((checkSum)>>>0).toString(16));  //przekonwertowanie na decymalne bez minusa
 
@@ -257,6 +264,7 @@ function codingCrc(massage) {
     }
 
     massageToSend+=convertToString(checkSum,bitCount);  //32 bo 32 bity są w  kluczu CRC
+
 
     firstCode+=" "+convertToString(checkSum,bitCount); //dodanie do tekstu CRC
 
@@ -280,7 +288,7 @@ function verifyCRC() {
         massageToSend = document.getElementById('outputconvertCRC').value;
     }
 
-    alert("massageToSend"+massageToSend);
+   // alert("massageToSend"+massageToSend);
 
     //alert("massageToSend "+massageToSend);
     //alert(checkoutputCRCId);
@@ -292,7 +300,7 @@ function verifyCRC() {
 
     var crcCode = massageToSend.substr(massageToSend.length-bitCount,massageToSend.length); // wytnij ostatnie bity CRC
 
-    alert(crcCode);
+    //alert(crcCode);
 
 
     massageToSend = massageToSend.substring(0, massageToSend.length-bitCount); //wytnij tekst
@@ -305,7 +313,7 @@ function verifyCRC() {
 
     onCRCTypeChange();
 
-    alert(massage);
+   // alert(massage);
 
     for(i = 0; i < massage.length; i++)
     {
@@ -320,18 +328,18 @@ function verifyCRC() {
     }
     var checkSumString;
 
-    alert("checksum" +convertToString(checkSum,bitCount));
+   // alert("checksum" +convertToString(checkSum,bitCount));
 
     if(crcCode.length!==bitCount){ //dodanie 0 z przodu jeżeli zostały pominięte
         crcCode = "0".repeat(bitCount-crcCode.length)+crcCode;
     }
 
-    alert("checksum" +convertToString(checkSum,bitCount));
-    alert("crcCode " +   crcCode);
+    //alert("checksum" +convertToString(checkSum,bitCount));
+   // alert("crcCode " +   crcCode);
 
     var correct=false;
     if(crcCode===convertToString(checkSum,bitCount)){
-        alert("true");
+   //     alert("true");
         correct=true;
         document.getElementById(checkoutputCRCId).innerHTML="";
         document.getElementById(checkoutputCRCId).innerHTML=massageToSend + '<span class="text-success">'+convertToString(checkSum,bitCount)+"</span>";
@@ -358,9 +366,9 @@ function verifyCRC() {
 function decodeCRC(massage, correct) {
 
     var words = chunkSubstr(massage, 8).join("");//rozdzielenie pobranego tekstu na osobne wyrazy.
-    alert("słowo po dekodowaniu: "+ words);
+   // alert("słowo po dekodowaniu: "+ words);
 
-    alert(typeOfCoding);
+    //alert(typeOfCoding);
 
     if(typeOfCoding==="All"){
         document.getElementById("decodeOutput").innerText =  words;
@@ -379,14 +387,14 @@ function decodeCRC(massage, correct) {
 
 function checkCRCDifference(correct) {
 
-    alert(firstCode);
+    //alert(firstCode);
 
     var strCheck = document.getElementById("checkoutputCRC").innerText;
     var strInputWords = firstCode.split(" ");
 
     var strInput = strInputWords[0]+strInputWords[1];
 
-    alert(strInput);
+    //alert(strInput);
 
     document.getElementById("differenceOutput1").innerHTML="";
     document.getElementById("differenceOutput").innerHTML="";
