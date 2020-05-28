@@ -585,15 +585,14 @@ function enterNoise() {
     }
     if(document.getElementById("typeOfNoise").value==="Bit w bloku danych (Scenariusz 2)")
     {
+       var word = words[0];
 
-        var wordPos = Math.floor(Math.random() * (+(words.length-2) - +0)) + +0;//który z bitów (oprócz ostatniego zostanie zmieniony
-        var word = words[wordPos]; //wylosuj jedno słowo
+        var pos = Math.floor(Math.random() * (+(word.length-bitCount) - +0)) + +0;//który z bitów (oprócz ostatnich bitów kontrolnych
 
-        random = Math.floor(Math.random() * (+max - +min)) + +min;  //losowa szansa na wygenerowanie szumu
+        var random = Math.floor(Math.random() * (+max - +min)) + +min;  //losowa szansa na wygenerowanie szumu
 
         if(random <= noiseFrequency) {  //jeżeli random jest mniejszy/rowny czestotliwosci szumu wtedy zmieniony bit na przeciwny
 
-            var pos = Math.floor(Math.random() * (+word.length-1 - +0)) + +0;  //który z bitów może być zamieniony
 
             if(word[pos]==="1"){
 
@@ -612,47 +611,33 @@ function enterNoise() {
 
         }
 
-        words[wordPos] = word;
+        document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + word
 
-        for(i=0;i<words.length;i++){
-            if(i===words.length-1){
-                        document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i];
-            }else{
-                        document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i]+" ";
-            }
-        }
 
     }
     if(document.getElementById("typeOfNoise").value==="Bit w bloku danych oraz bit w sumie kontrolnej (scenariusz 3)")
     {
+        alert("Bit w bloku danych oraz bit w sumie kontrolnej (scenariusz 3)");
 
-        var wordPos = Math.floor(Math.random() * (+(words.length-2) - +0)) + +0;//który z bitów (oprócz ostatniego zostanie zmieniony
-        var word = words[wordPos]; //wylosuj jedno słowo
-        var wordCRC = words[words.length-1]; //ostatnie słowo
+        var word = words[0];
+        var wordOut="";
 
-        random = Math.floor(Math.random() * (+max - +min)) + +min;  //losowa szansa na wygenerowanie szumu
+        var pos = Math.floor(Math.random() * (+(word.length-bitCount) - +0)) + +0;//który z bitów (oprócz ostatnich bitów kontrolnych
+        var pos2 = Math.floor(Math.random() * (+(word.length)-(word.length-bitCount)) + +word.length-bitCount);//który z bitów w crc
+
+        alert("pos: "+ pos+"   pos2: "+pos2);
+
+        var random = Math.floor(Math.random() * (+max - +min)) + +min;  //losowa szansa na wygenerowanie szumu
+
 
         if(random <= noiseFrequency) {  //jeżeli random jest mniejszy/rowny czestotliwosci szumu wtedy zmieniony bit na przeciwny
 
-            var pos = Math.floor(Math.random() * (+word.length-1 - +0)) + +0;  //który z bitów może być zamieniony
-
-            word = mirrorBit(word, pos);
-
-            pos = Math.floor(Math.random() * (+word.length-1 - +0)) + +0;  //który z bitów może być zamieniony
-
-            wordCRC = mirrorBit(wordCRC, pos);
+            wordOut = mirrorBit(word, pos);
         }
 
-        words[wordPos] = word;
-        words[words.length-1] = wordCRC;
+        wordOut = mirrorBit(wordOut, pos2);
 
-        for(i=0;i<words.length;i++){
-            if(i===words.length-1){
-                document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i];
-            }else{
-                document.getElementById("outputconvertAll").value = document.getElementById("outputconvertAll").value + words[i]+" ";
-            }
-        }
+        document.getElementById("outputconvertAll").value =wordOut;
 
     }
 }

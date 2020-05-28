@@ -456,21 +456,29 @@ function checkDifference() {
         }else{
             document.getElementById("differenceOutput1").innerHTML+=strFirst[i];
         }
-        if(strGlobal[i]===strRepaired[i]&&strFirst[i]!==strRepaired[i]){
-            document.getElementById("differenceOutput").innerHTML+='<span class="text-warning" ><b>'+strGlobal[i]+'</b></span>';
-            document.getElementById("differenceOutput2").innerHTML+='<span class="text-success"><b>'+strRepaired[i]+'</b></span>';
-            repairedMistakeCounter++;
+        if(strFirst[i]!==strRepaired[i]){
+            document.getElementById("differenceOutput").innerHTML+='<span class="text-warning"><b>'+strGlobal[i]+'</b></span>';
+            document.getElementById("differenceOutput2").innerHTML+='<span class="text-danger"><b>'+strRepaired[i]+'</b></span>';
+            mistakeCounter++;
+
         }else{
-            if(strGlobal[i]!==strRepaired[i]&&strGlobal[i]!==strFirst[i]) {
-                document.getElementById("differenceOutput").innerHTML+='<span class="text-warning"><b>'+strGlobal[i]+'</b></span>';
-                document.getElementById("differenceOutput2").innerHTML+='<span class="text-danger"><b>'+strRepaired[i]+'</b></span>';
-                detectedMistakeCounter++;
-            }
-            else{
-                document.getElementById("differenceOutput").innerHTML+=strGlobal[i];
-                document.getElementById("differenceOutput2").innerHTML+=strRepaired[i];
+            if(strGlobal[i]===strRepaired[i]&&strFirst[i]!==strRepaired[i]){
+                document.getElementById("differenceOutput").innerHTML+='<span class="text-warning" ><b>'+strGlobal[i]+'</b></span>';
+                document.getElementById("differenceOutput2").innerHTML+='<span class="text-success"><b>'+strRepaired[i]+'</b></span>';
+                repairedMistakeCounter++;
+            }else{
+                if(strGlobal[i]!==strRepaired[i]&&strGlobal[i]!==strFirst[i]) {
+                    document.getElementById("differenceOutput").innerHTML+='<span class="text-warning"><b>'+strGlobal[i]+'</b></span>';
+                    document.getElementById("differenceOutput2").innerHTML+='<span class="text-danger"><b>'+strRepaired[i]+'</b></span>';
+                    detectedMistakeCounter++;
+                }
+                else{
+                    document.getElementById("differenceOutput").innerHTML+=strGlobal[i];
+                    document.getElementById("differenceOutput2").innerHTML+=strRepaired[i];
+                }
             }
         }
+
     }
 
 
