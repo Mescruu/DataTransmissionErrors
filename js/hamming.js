@@ -449,17 +449,24 @@ function checkDifference() {
 
             continue;
         }
+
         if(strGlobal[i]!==strFirst[i])
         {
+            alert("bład strGlobal[i]!==strFirst[i]");
+
             mistakeCounter++;
             document.getElementById("differenceOutput1").innerHTML+="<b>"+strFirst[i]+"</b>";
         }else{
             document.getElementById("differenceOutput1").innerHTML+=strFirst[i];
         }
-        if(strFirst[i]!==strRepaired[i]){
+        if(strGlobal[i]!==strRepaired[i]){
+            alert("bład strFirst[i]!==strRepaired[i]");
             document.getElementById("differenceOutput").innerHTML+='<span class="text-warning"><b>'+strGlobal[i]+'</b></span>';
             document.getElementById("differenceOutput2").innerHTML+='<span class="text-danger"><b>'+strRepaired[i]+'</b></span>';
-            mistakeCounter++;
+
+            if(strGlobal[i]===strFirst[i]) {
+                mistakeCounter++; //bład wprowadzony przez kodowanie Hamminga
+            }
 
         }else{
             if(strGlobal[i]===strRepaired[i]&&strFirst[i]!==strRepaired[i]){
